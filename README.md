@@ -1,5 +1,6 @@
 ![FocusCatalog Screenshot](public/sample1.jpg)
-# ❤️ FocusCatalog
+# ❤️ FocusCatalog (Fooocus Tool)
+Fooocus Tool to organise your LoRA and Checkpoint templates with previews of template names and TRIGGER WORDS always ready to copy and paste.
 
 FocusCatalog was born out of necessity.  
 Working with Fooocus quickly becomes frustrating: dozens (or hundreds) of models and LoRA files accumulate, often with cryptic names and no previews.  
