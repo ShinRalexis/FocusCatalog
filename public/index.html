@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FocusCatalog</title>
+
+<link rel="icon" type="image/svg+xml"
+      href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><text x="50%" y="78%" font-size="100" text-anchor="middle">❤️</text></svg>'/>
+
+<style>
+  :root { --bg:#0b0c10; --fg:#e8eaf0; --muted:#aeb3c2; --card:#141722; --edge:#262a36; --new:#22c55e; --accent:#f43f5e; --cp-tint:rgba(34,197,94,0.08); }
+  * { box-sizing:border-box }
+  html,body { height:100% }
+  body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; position:relative; }
+  body::before{ content:""; position:fixed; inset:0; background-image:url("BG.png"); background-size:cover; background-position:center; opacity:.12; mix-blend-mode:normal; pointer-events:none; z-index:-1; }
+  header { position:sticky; top:0; z-index:10; background:linear-gradient(180deg, rgba(11,12,16,.96), rgba(11,12,16,.90)); border-bottom:1px solid var(--edge) }
+  .wrap { max-width:1180px; margin:0 auto; padding:18px 16px }
+  h1 { margin:0 0 8px; font-size:22px; font-weight:700 }
+  .controls { display:grid; grid-template-columns: 1fr 180px 160px 140px; gap:10px; align-items:center }
+  input,select,button { height:40px; background:#0f1118; color:var(--fg); border:1px solid var(--edge); border-radius:10px; padding:0 12px }
+  button { cursor:pointer } button:hover { border-color:#2f3546 }
+
+  .tabsbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:10px; flex-wrap:wrap; }
+  .tabs { display:flex; gap:10px; flex-wrap:wrap }
+  .tab {
+    padding:8px 12px; border:1px solid var(--edge); border-radius:10px;
+    cursor:pointer; background:#10131b; text-decoration:none; color:inherit; display:inline-flex; align-items:center; justify-content:center;
+  }
+  .tab:visited { color:inherit; text-decoration:none; }
+  .tab.active { border-color:#3a4257; background:#121622 }
+
+  .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:14px; padding:16px }
+
+  /* Card */
+  .card {
+    border:1px solid var(--edge);
+    border-radius:16px;
+    background:rgba(20,23,34,.88);
+    backdrop-filter:saturate(120%) blur(2px);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .card.checkpoint { background: linear-gradient(0deg, var(--cp-tint), var(--cp-tint)), rgba(20,23,34,.88); border-color:#2b3a32; }
+
+  .thumb { aspect-ratio: 16 / 10; background:#0f1118; display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--edge); position:relative; }
+  .thumb img { max-width:100%; max-height:100%; display:block }
+
+  /* Overlay nella thumb */
+  .thumb .gear, .thumb .fav, .thumb .nsfw { position:absolute; z-index:3; }
+  .thumb .gear { top:10px; right:10px; background:#0f1118; border:1px solid var(--edge); border-radius:10px; padding:6px; cursor:pointer; }
+  .thumb .gear:hover { border-color:#3a4257 }
+  .thumb .fav  { top:10px; left:10px; background:#0f1118; border:1px solid var(--edge); border-radius:10px; padding:6px 8px; cursor:pointer; user-select:none; line-height:1; }
+  .thumb .fav:hover { border-color:#3a4257 }
+  .thumb .fav.active { color:var(--accent); border-color:var(--accent) }
+
+  /* Pallino NSFW nudo in basso a destra */
+  .thumb .nsfw { right:10px; bottom:10px; cursor:pointer; user-select:none; line-height:1; background:transparent; border:none; padding:0; font-size:18px; }
+
+  /* Meta */
+  .meta { flex:1; display:flex; flex-direction:column; padding:12px }
+  .meta-main { flex:1; }
+  .meta-bottom { margin-top:auto; }
+
+  .name { font-weight:700; margin:0 0 6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+  .muted { color:#aeb3c2; font-size:12px }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px }
+  .chip { border:1px solid var(--edge); border-radius:999px; padding:4px 8px; font-size:12px; color:#aeb3c2 }
+  .chip-fav { border-color: var(--accent); color: var(--accent); background: rgba(244,63,94,.08); font-weight:700 }
+  .chip-new { background: var(--new); color:#072b12; border-color:transparent; font-weight:700 }
+
+  .row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap } /* (non più usata per Civitai) */
+  a.btn { border:1px solid var(--edge); background:#10131b; color:#fff; padding:8px 10px; border-radius:10px; text-decoration:none; font-size:13px }
+  a.btn:hover { border-color:#2f3546 }
+
+  .toast { position:fixed; bottom:72px; right:16px; background:#121622; color:#e8eaf0; border:1px solid var(--edge); border-radius:10px; padding:10px 12px; display:none }
+  .bottombar { position:fixed; left:0; right:0; bottom:0; background:rgba(16,17,24,.96); border-top:1px solid var(--edge); }
+  .bottombar .inner { max-width:1180px; margin:0 auto; padding:10px 16px; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+  .bottombar .left { color:#aeb3c2; font-size:12px } .bottombar .right { color:#aeb3c2; font-size:12px }
+  main { padding-bottom:64px }
+
+  /* Trigger Words */
+  .tw { margin-top:12px; }
+  .tw-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .tw-title { font-weight:700; font-size:12px; letter-spacing:.02em; color:#c8b9ff }
+  .tw-copy { font-size:11px; border:1px solid rgba(255,255,255,.18); background:transparent; color:#e9e1ff; border-radius:8px; height:auto; padding:3px 6px; cursor:pointer }
+  .tw-copy:hover { border-color:#a48bff }
+  .tw-box { background:#3b2a6f; border:1px solid #5a46a9; border-radius:14px; padding:10px 12px; max-height:140px; overflow:auto; color:#fff; line-height:1.45; }
+
+  /* ===== NOME FILE (container azzurro) ===== */
+  .fn { margin-top:10px; }
+  .fn-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .fn-title { font-weight:700; font-size:12px; letter-spacing:.02em; color:#9fd5ff; }
+  .fn-copy { font-size:11px; border:1px solid rgba(255,255,255,.18); background:transparent; color:#cfeaff; border-radius:8px; height:auto; padding:3px 6px; cursor:pointer }
+  .fn-copy:hover { border-color:#64b5ff; }
+  .fn-box { background:#13324a; border:1px solid #295d8b; border-radius:14px; padding:10px 12px; color:#e6f6ff; line-height:1.45; overflow:hidden; width:100%; }
+  .fn-box .fittext { display:inline-block; white-space:nowrap; transform-origin:left center; }
+
+  /* ===== Civitai button in fondo ===== */
+  .civ-wrap { display:flex; justify-content:center; margin:12px 0 8px; }
+  .civ-btn { display:inline-flex; align-items:center; justify-content:center; border:none; background:transparent; padding:0; cursor:pointer; }
+  .civ-btn img { display:block; height:28px; max-width:180px; }
+  .civ-btn:hover img { transform:translateY(-1px); filter:drop-shadow(0 0 6px rgba(100,181,255,.25)); }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div id="titleBox">
+      <h1 id="titleText" data-i18n="title.h1">❤️ FocusCatalog — Gestisci e utilizza i tuoi modelli Fooocus senza più confusione.</h1>
+    </div>
+    <div class="controls">
+      <input id="q" data-i18n-placeholder="ui.search_placeholder" placeholder="Cerca per nome o percorso…" />
+      <select id="sort">
+        <option value="name-asc" data-i18n="sort.name_asc">Nome ↑</option>
+        <option value="name-desc" data-i18n="sort.name_desc">Nome ↓</option>
+        <option value="date-desc" selected data-i18n="sort.date_desc">Più recenti</option>
+        <option value="date-asc" data-i18n="sort.date_asc">Meno recenti</option>
+        <option value="size-desc" data-i18n="sort.size_desc">Più pesanti</option>
+        <option value="size-asc" data-i18n="sort.size_asc">Più leggeri</option>
+      </select>
+      <select id="per">
+        <option value="500" selected>500</option>
+        <option value="1000">1000</option>
+        <option value="1500">1500</option>
+        <option value="2000">2000</option>
+      </select>
+      <button id="refreshBtn" data-i18n="ui.refresh" data-i18n-title="ui.refresh_title" title="Riscansiona cartelle, aggiungi nuovi e rimuovi scomparsi">Aggiorna catalogo</button>
+    </div>
+
+    <div class="tabsbar">
+      <div class="tabs">
+        <div class="tab active" data-type="" data-i18n="tabs.all">Tutti</div>
+        <div class="tab" data-type="Checkpoint" data-i18n="tabs.checkpoint">Checkpoint</div>
+        <div class="tab" data-type="LoRA" data-i18n="tabs.lora">LoRA</div>
+        <div class="tab" data-type="__favorites" data-i18n="tabs.favorites">Preferiti</div>
+      </div>
+      <div class="tabs">
+        <a href="help.html" class="tab" data-i18n-title="tabs.help_title" title="Guida & Help" aria-label="Guida e Help" data-i18n-aria="tabs.help_aria">ℹ️</a>
+        <a href="options.html" class="tab" data-i18n-title="tabs.options_title" title="Opzioni">⚙️</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap"><div class="grid" id="grid"></div></main>
+<div class="toast" id="toast"></div>
+
+<div class="bottombar">
+  <div class="inner">
+    <div class="left" id="count">—</div>
+    <div class="right" data-i18n="footer.tip">
+      ⚙️ Per completare una scheda: clicca sull’ingranaggio della card, incolla il link Civitai (puoi includere <code>modelVersionId</code>) e conferma. • Endpoint API su <code>/api</code>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ i18n overlay (IT base) ============ */
+const LS_LANG = 'focus_lang_v1';
+const SUPPORTED = ['it','en','es','fr'];
+
+const I18N = {
+  it: {
+    'title.h1': '❤️ FocusCatalog — Gestisci e utilizza i tuoi modelli Fooocus senza più confusione.',
+    'ui.search_placeholder': 'Cerca per nome o percorso…',
+    'sort.name_asc': 'Nome ↑',
+    'sort.name_desc': 'Nome ↓',
+    'sort.date_desc': 'Più recenti',
+    'sort.date_asc': 'Meno recenti',
+    'sort.size_desc': 'Più pesanti',
+    'sort.size_asc': 'Più leggeri',
+    'ui.refresh': 'Aggiorna catalogo',
+    'ui.refresh_working': 'Aggiorno…',
+    'ui.refresh_title': 'Riscansiona cartelle, aggiungi nuovi e rimuovi scomparsi',
+    'tabs.all': 'Tutti',
+    'tabs.checkpoint': 'Checkpoint',
+    'tabs.lora': 'LoRA',
+    'tabs.favorites': 'Preferiti',
+    'tabs.help_title': 'Guida & Help',
+    'tabs.help_aria': 'Guida e Help',
+    'tabs.options_title': 'Opzioni',
+    'toast.copied': 'Copiato!',
+    'toast.catalog_updated': 'Catalogo aggiornato',
+    'prompt.civitai': 'Incolla il link Civitai del modello.\nSuggerimento: per una versione precisa usa un link con modelVersionId=...',
+    'msg.updated_reload': 'Aggiornato! Ricarico dati…',
+    'err.refresh_failed': 'Aggiornamento non riuscito. Assicurati che il server sia avviato.\nDettagli: ',
+    'footer.tip': '⚙️ Per completare una scheda: clicca sull’ingranaggio della card, incolla il link Civitai (puoi includere <code>modelVersionId</code>) e conferma. • Endpoint API su <code>/api</code>',
+    'chips.new': 'NUOVO',
+    'chips.type.checkpoint': 'Checkpoint',
+    'chips.type.lora': 'LoRA',
+    'tips.favorite': 'Preferito',
+    'tips.gear': 'Imposta link Civitai',
+    'tips.nsfw_safe': 'SAFE: clic per contrassegnare NSFW (🔴)',
+    'tips.nsfw_nsfw': 'NSFW: clic per rendere SAFE (🟢)',
+    'card.no_preview': 'Nessuna anteprima',
+    'tw.title': 'TRIGGER WORDS',
+    'tw.copy_all': 'Copia tutti',
+    'tw.none': 'Nessun Trigger Word su Civitai',
+    'file.title': 'NOME FILE',
+    'file.copy': 'Copia',
+    'count.line': '{total} modelli trovati • Mostrati {shown}{nsfw}',
+    'count.nsfw_hidden': ' • NSFW nascosti'
+  },
+  en: {
+    'title.h1': '❤️ FocusCatalog — Manage and use your Fooocus models without confusion.',
+    'ui.search_placeholder': 'Search by name or path…',
+    'sort.name_asc': 'Name ↑',
+    'sort.name_desc': 'Name ↓',
+    'sort.date_desc': 'Newest',
+    'sort.date_asc': 'Oldest',
+    'sort.size_desc': 'Heaviest',
+    'sort.size_asc': 'Lightest',
+    'ui.refresh': 'Refresh catalog',
+    'ui.refresh_working': 'Refreshing…',
+    'ui.refresh_title': 'Rescan folders, add new and remove missing',
+    'tabs.all': 'All',
+    'tabs.checkpoint': 'Checkpoint',
+    'tabs.lora': 'LoRA',
+    'tabs.favorites': 'Favorites',
+    'tabs.help_title': 'Guide & Help',
+    'tabs.help_aria': 'Guide and Help',
+    'tabs.options_title': 'Options',
+    'toast.copied': 'Copied!',
+    'toast.catalog_updated': 'Catalog refreshed',
+    'prompt.civitai': 'Paste the model’s Civitai link.\nTip: for a specific version use a link with modelVersionId=...',
+    'msg.updated_reload': 'Updated! Reloading…',
+    'err.refresh_failed': 'Refresh failed. Make sure the server is running.\nDetails: ',
+    'footer.tip': '⚙️ To complete a card: click the gear on the card, paste the Civitai link (you can include <code>modelVersionId</code>) and confirm. • API endpoint at <code>/api</code>',
+    'chips.new': 'NEW',
+    'chips.type.checkpoint': 'Checkpoint',
+    'chips.type.lora': 'LoRA',
+    'tips.favorite': 'Favorite',
+    'tips.gear': 'Set Civitai link',
+    'tips.nsfw_safe': 'SAFE: click to mark NSFW (🔴)',
+    'tips.nsfw_nsfw': 'NSFW: click to set SAFE (🟢)',
+    'card.no_preview': 'No preview',
+    'tw.title': 'TRIGGER WORDS',
+    'tw.copy_all': 'Copy all',
+    'tw.none': 'No Trigger Words on Civitai',
+    'file.title': 'FILE NAME',
+    'file.copy': 'Copy',
+    'count.line': '{total} models found • Showing {shown}{nsfw}',
+    'count.nsfw_hidden': ' • NSFW hidden'
+  },
+  es: {
+    'title.h1': '❤️ FocusCatalog — Gestiona y usa tus modelos de Fooocus sin confusiones.',
+    'ui.search_placeholder': 'Busca por nombre o ruta…',
+    'sort.name_asc': 'Nombre ↑',
+    'sort.name_desc': 'Nombre ↓',
+    'sort.date_desc': 'Más recientes',
+    'sort.date_asc': 'Menos recientes',
+    'sort.size_desc': 'Más pesados',
+    'sort.size_asc': 'Más ligeros',
+    'ui.refresh': 'Actualizar catálogo',
+    'ui.refresh_working': 'Actualizando…',
+    'ui.refresh_title': 'Reescanear carpetas, añadir nuevos y quitar ausentes',
+    'tabs.all': 'Todos',
+    'tabs.checkpoint': 'Checkpoint',
+    'tabs.lora': 'LoRA',
+    'tabs.favorites': 'Favoritos',
+    'tabs.help_title': 'Guía y Ayuda',
+    'tabs.help_aria': 'Guía y Ayuda',
+    'tabs.options_title': 'Opciones',
+    'toast.copied': '¡Copiado!',
+    'toast.catalog_updated': 'Catálogo actualizado',
+    'prompt.civitai': 'Pega el enlace de Civitai del modelo.\nConsejo: para una versión específica usa un enlace con modelVersionId=...',
+    'msg.updated_reload': '¡Actualizado! Recargando…',
+    'err.refresh_failed': 'No se pudo actualizar. Asegúrate de que el servidor esté en ejecución.\nDetalles: ',
+    'footer.tip': '⚙️ Para completar una tarjeta: haz clic en el engranaje, pega el enlace de Civitai (puedes incluir <code>modelVersionId</code>) y confirma. • Endpoint API en <code>/api</code>',
+    'chips.new': 'NUEVO',
+    'chips.type.checkpoint': 'Checkpoint',
+    'chips.type.lora': 'LoRA',
+    'tips.favorite': 'Favorito',
+    'tips.gear': 'Definir enlace de Civitai',
+    'tips.nsfw_safe': 'SAFE: haz clic para marcar NSFW (🔴)',
+    'tips.nsfw_nsfw': 'NSFW: haz clic para poner SAFE (🟢)',
+    'card.no_preview': 'Sin vista previa',
+    'tw.title': 'PALABRAS CLAVE',
+    'tw.copy_all': 'Copiar todo',
+    'tw.none': 'Sin palabras clave en Civitai',
+    'file.title': 'NOMBRE DE ARCHIVO',
+    'file.copy': 'Copiar',
+    'count.line': '{total} modelos encontrados • Mostrando {shown}{nsfw}',
+    'count.nsfw_hidden': ' • NSFW ocultos'
+  },
+  fr: {
+    'title.h1': '❤️ FocusCatalog — Gérez et utilisez vos modèles Fooocus sans confusion.',
+    'ui.search_placeholder': 'Rechercher par nom ou chemin…',
+    'sort.name_asc': 'Nom ↑',
+    'sort.name_desc': 'Nom ↓',
+    'sort.date_desc': 'Plus récents',
+    'sort.date_asc': 'Moins récents',
+    'sort.size_desc': 'Plus lourds',
+    'sort.size_asc': 'Plus légers',
+    'ui.refresh': 'Actualiser le catalogue',
+    'ui.refresh_working': 'Actualisation…',
+    'ui.refresh_title': 'Rescanner les dossiers, ajouter les nouveaux et retirer les manquants',
+    'tabs.all': 'Tous',
+    'tabs.checkpoint': 'Checkpoint',
+    'tabs.lora': 'LoRA',
+    'tabs.favorites': 'Favoris',
+    'tabs.help_title': 'Guide & Aide',
+    'tabs.help_aria': 'Guide et Aide',
+    'tabs.options_title': 'Options',
+    'toast.copied': 'Copié !',
+    'toast.catalog_updated': 'Catalogue actualisé',
+    'prompt.civitai': 'Collez le lien Civitai du modèle.\nAstuce : pour une version précise utilisez un lien avec modelVersionId=...',
+    'msg.updated_reload': 'Mis à jour ! Rechargement…',
+    'err.refresh_failed': 'Échec de l’actualisation. Assurez-vous que le serveur est démarré.\nDétails : ',
+    'footer.tip': '⚙️ Pour compléter une carte : cliquez sur l’icône engrenage, collez le lien Civitai (vous pouvez inclure <code>modelVersionId</code>) et confirmez. • Endpoint API sur <code>/api</code>',
+    'chips.new': 'NOUVEAU',
+    'chips.type.checkpoint': 'Checkpoint',
+    'chips.type.lora': 'LoRA',
+    'tips.favorite': 'Favori',
+    'tips.gear': 'Définir le lien Civitai',
+    'tips.nsfw_safe': 'SAFE : cliquer pour marquer NSFW (🔴)',
+    'tips.nsfw_nsfw': 'NSFW : cliquer pour passer en SAFE (🟢)',
+    'card.no_preview': 'Aperçu indisponible',
+    'tw.title': 'MOTS-CLÉS',
+    'tw.copy_all': 'Tout copier',
+    'tw.none': 'Aucun mot-clé sur Civitai',
+    'file.title': 'NOM DE FICHIER',
+    'file.copy': 'Copier',
+    'count.line': '{total} modèles trouvés • Affichés {shown}{nsfw}',
+    'count.nsfw_hidden': ' • NSFW masqués'
+  }
+};
+
+function getLang(){
+  const v = localStorage.getItem(LS_LANG) || 'it';
+  return SUPPORTED.includes(v) ? v : 'it';
+}
+function t(key){
+  const lang = getLang();
+  return (I18N[lang] && I18N[lang][key]) || I18N.it[key] || key;
+}
+function applyI18n(){
+  document.documentElement.lang = getLang();
+  // Text nodes
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    const html = t(key);
+    if (/<[a-z][\s\S]*>/i.test(html)) el.innerHTML = html; else el.textContent = html;
+  });
+  // Placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder')));
+  });
+  // Titles / aria
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{
+    el.setAttribute('title', t(el.getAttribute('data-i18n-title')));
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>{
+    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+  });
+}
+
+/* ====== Helpers i18n-aware ====== */
+function i18nNumber(n){
+  try { return new Intl.NumberFormat(getLang(), { minimumFractionDigits:2, maximumFractionDigits:2 }).format(n); }
+  catch { return (Math.round(n*100)/100).toFixed(2); }
+}
+function fmtMB(v){ return i18nNumber(v) + ' MB'; }
+function fmtDate(ts){
+  try { return new Intl.DateTimeFormat(getLang(), { dateStyle:'short', timeStyle:'short' }).format(new Date(ts)); }
+  catch { return new Date(ts).toLocaleString(); }
+}
+
+/* ====== App code (invariato, con t() iniettato) ====== */
+const API = `${location.origin}/api`;
+
+/* LocalStorage keys */
+const LS_FAVS       = "fooocus_favorites_v1";
+const LS_NSFW_FLAGS = "fooocus_nsfw_flags_v1";   // { slug:true } => NSFW
+const LS_NSFW_SHOW  = "fooocus_nsfw_show_v1";    // "hide"(default) | "show"
+
+/* Stato UI */
+const state = {
+  items: [], filtered: [],
+  pageSize: 96, q:"", type:"", sort:"date-desc",
+  favorites: new Set(JSON.parse(localStorage.getItem(LS_FAVS) || "[]")),
+  nsfw: JSON.parse(localStorage.getItem(LS_NSFW_FLAGS) || "{}"),
+  showNSFW: (localStorage.getItem(LS_NSFW_SHOW) || "hide") === "show"
+};
+
+/* Helpers */
+function saveFavs(){ localStorage.setItem(LS_FAVS, JSON.stringify(Array.from(state.favorites))); }
+function isFav(slug){ return state.favorites.has(slug); }
+function toggleFav(slug){
+  if(isFav(slug)) state.favorites.delete(slug); else state.favorites.add(slug);
+  saveFavs(); render();
+}
+
+/* NSFW flags (per-scheda) */
+function saveNSFW(){ localStorage.setItem(LS_NSFW_FLAGS, JSON.stringify(state.nsfw || {})); }
+function isNSFW(slug){ return !!(state.nsfw && state.nsfw[slug]); }
+function toggleNSFW(slug){
+  if(!state.nsfw) state.nsfw = {};
+  state.nsfw[slug] = !isNSFW(slug);
+  saveNSFW();
+  render();
+}
+
+/* Toast minimal */
+function toast(msg){
+  const tdiv=document.getElementById('toast'); if(!tdiv) return;
+  tdiv.textContent=msg; tdiv.style.display='block'; setTimeout(()=>tdiv.style.display='none',1500);
+}
+
+/* Utility */
+function esc(s){ return String(s||"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
+function baseName(p){ return (p||"").split(/[/\\\\]/).pop(); }
+/* Escape sicuro per stringhe in onclick */
+function jsStr(s){ return String(s||"").replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n'); }
+
+async function copyText(text){
+  try{ await navigator.clipboard.writeText(text); toast(t('toast.copied')); }
+  catch(e){
+    const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    toast(t('toast.copied'));
+  }
+}
+
+/* Civitai link setter */
+async function setLink(slug){
+  const url = prompt(t('prompt.civitai'));
+  if(!url) return;
+  try{
+    const r = await fetch(`${API}/set_link_and_fetch`, { method:"POST", headers:{'Content-Type':'application/json'}, body: JSON.stringify({slug, civitai_url:url}) });
+    const j = await r.json();
+    if(!j.ok) throw new Error(j.error||"Errore");
+    toast(t('msg.updated_reload'));
+    await loadItems(true);
+  }catch(e){ alert((t('err.refresh_failed')||'Errore: ')+ e.message); }
+}
+
+/* Refresh catalogo */
+async function doRefresh(){
+  const btn = document.getElementById('refreshBtn');
+  try{
+    btn.disabled = true; btn.textContent = t('ui.refresh_working');
+    const r = await fetch(`${API}/refresh`, { method:"POST" });
+    if(!r.ok){ let msg=`HTTP ${r.status}`; try{ const j=await r.json(); msg=j.error||msg; }catch(_){} throw new Error(msg); }
+    await loadItems(true);
+    toast(t('toast.catalog_updated'));
+  }catch(e){ alert(t('err.refresh_failed') + e.message); }
+  finally{ btn.disabled = false; btn.textContent = t('ui.refresh'); }
+}
+
+/* === Trigger Words helpers === */
+function normalizeTriggers(raw) {
+  const src = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+  const bag = new Set();
+  const out = [];
+  for (const s of src) {
+    if (!s) continue;
+    const parts = String(s).split(",").map(x => x.trim()).filter(Boolean);
+    for (let p of parts) {
+      const k = p.toLowerCase();
+      if (!bag.has(k)) { bag.add(k); out.push(p.toUpperCase()); }
+    }
+  }
+  return out;
+}
+
+function triggersBlock(it){
+  if (it.type !== "LoRA") return "";
+  const list = normalizeTriggers(it.triggerWords || []);
+  if (list.length === 0) {
+    if (it.triggerWordsChecked && it.triggerWordsNotFound) {
+      return `<div class="tw"><div class="tw-head"><div class="tw-title">${t('tw.title')}</div></div><div class="muted">${t('tw.none')}</div></div>`;
+    }
+    return "";
+  }
+  const text = esc(list.join(", "));
+  return `
+    <div class="tw">
+      <div class="tw-head">
+        <div class="tw-title">${t('tw.title')}</div>
+        <button class="tw-copy" onclick="copyText('${text}')">${t('tw.copy_all')}</button>
+      </div>
+      <div class="tw-box">${text}</div>
+    </div>
+  `;
+}
+
+/* ===== NOME FILE (container azzurro) ===== */
+function filenameBlock(fname){
+  const raw = String(fname||"");
+  const copyVal = jsStr(raw);
+  const text = esc(raw);
+  return `
+    <div class="fn">
+      <div class="fn-head">
+        <div class="fn-title">${t('file.title')}</div>
+        <button class="fn-copy" onclick="copyText('${copyVal}')">${t('file.copy')}</button>
+      </div>
+      <div class="fn-box"><span class="fittext" title="${text}">${text}</span></div>
+    </div>
+  `;
+}
+
+/* Civitai button (immagine) */
+function civitaiBlock(url){
+  if (!url) return "";
+  return `
+    <div class="civ-wrap">
+      <a class="civ-btn" href="${url}" target="_blank" rel="noreferrer" aria-label="Civitai">
+        <img src="civitai.png" alt="Civitai">
+      </a>
+    </div>
+  `;
+}
+
+/* Adattamento: usa la larghezza disponibile (senza padding) */
+function fitFilenameBoxes(){
+  document.querySelectorAll('.fn-box .fittext').forEach(el=>{
+    const parent = el.parentElement;
+    if (!parent) return;
+    const cs = getComputedStyle(parent);
+    const avail = parent.clientWidth
+      - parseFloat(cs.paddingLeft || 0)
+      - parseFloat(cs.paddingRight || 0);
+    el.style.fontSize = '14px';
+    el.style.transform = 'none';
+    let size = 14;
+    while (el.scrollWidth > avail && size > 9) {
+      size -= 0.5;
+      el.style.fontSize = size + 'px';
+    }
+    if (el.scrollWidth > avail) {
+      const factor = avail / el.scrollWidth;
+      if (factor < 1) el.style.transform = `scale(${factor})`;
+    }
+  });
+}
+
+/* Render grid */
+function render(){
+  const grid=document.getElementById('grid'); const count=document.getElementById('count');
+  let arr = state.items.slice();
+
+  if(state.q){ const q=state.q.toLowerCase(); arr=arr.filter(it=>(it.name+" "+(it.display_name||"")+" "+it.filename+" "+it.folder).toLowerCase().includes(q)); }
+  if(state.type){
+    if(state.type === "__favorites") arr = arr.filter(it => isFav(it.slug));
+    else arr = arr.filter(it => it.type === state.type);
+  }
+  if(!state.showNSFW){ arr = arr.filter(it => !isNSFW(it.slug)); }
+
+  arr.sort((a,b)=>{ const A=(a.display_name||a.name), B=(b.display_name||b.name);
+    switch(state.sort){
+      case "name-asc": return A.localeCompare(B);
+      case "name-desc": return B.localeCompare(A);
+      case "date-desc": return new Date(b.modified)-new Date(a.modified);
+      case "date-asc": return new Date(a.modified)-new Date(b.modified);
+      case "size-desc": return b.size_mb-a.size_mb;
+      case "size-asc": return a.size_mb-b.size_mb;
+    } return 0;
+  });
+
+  state.filtered=arr;
+  const page=arr.slice(0,state.pageSize);
+
+  grid.innerHTML=page.map(it=>{
+    const img=(it.previews&&it.previews[0])?it.previews[0]:"";
+    const title = esc(it.display_name||it.name);
+    const fname = baseName(it.filename);
+    const favActive = isFav(it.slug) ? "active" : "";
+    const twHTML = triggersBlock(it);
+    const nsfwActive = isNSFW(it.slug);
+    const isNew = !!it.is_new;
+
+    const chips = `
+      ${isNew ? `<span class="chip chip-new">${t('chips.new')}</span>` : ``}
+      <span class="chip">${it.type==='Checkpoint'?t('chips.type.checkpoint'):t('chips.type.lora')}</span>
+      <span class="chip">${fmtMB(it.size_mb)}</span>
+      <span class="chip">${fmtDate(it.modified)}</span>
+      ${isFav(it.slug) ? `<span class="chip chip-fav" title="${t('tips.favorite')}" aria-label="${t('tips.favorite')}">♥</span>` : ""}
+    `;
+
+    const fnHTML = filenameBlock(fname);
+    const civBottom = civitaiBlock(it.civitai_url || "");
+
+    const nsfwTitle = nsfwActive ? t('tips.nsfw_nsfw') : t('tips.nsfw_safe');
+
+    return `
+      <article class="card ${it.type==='Checkpoint' ? 'checkpoint' : ''}">
+        <div class="thumb">
+          ${img?`<img loading="lazy" src="${img}" alt="preview">`:`<span class="muted">${t('card.no_preview')}</span>`}
+          <div class="fav ${favActive}" title="${isFav(it.slug)?t('tips.favorite'):t('tips.favorite')}" onclick="toggleFav('${it.slug}')">♥</div>
+          <div class="gear" title="${t('tips.gear')}" onclick="setLink('${it.slug}')">⚙️</div>
+          <div class="nsfw ${nsfwActive?'red':'green'}" title="${nsfwTitle}" onclick="toggleNSFW('${it.slug}')">${nsfwActive?'🔴':'🟢'}</div>
+        </div>
+
+        <div class="meta">
+          <div class="meta-main">
+            <div class="name"><span>${title}</span></div>
+            ${fnHTML}
+            <div class="chips">${chips}</div>
+          </div>
+          <div class="meta-bottom">
+            ${civBottom}
+            ${twHTML}
+          </div>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  requestAnimationFrame(fitFilenameBoxes);
+
+  const nsfwPart = state.showNSFW ? '' : t('count.nsfw_hidden');
+  const line = t('count.line')
+    .replace('{total}', state.filtered.length)
+    .replace('{shown}', Math.min(state.pageSize,state.filtered.length))
+    .replace('{nsfw}', nsfwPart);
+  count.innerHTML = line;
+}
+
+/* TITLE.png se presente */
+(function(){
+  const box = document.getElementById("titleBox");
+  if(!box) return;
+  const img = new Image();
+  img.alt = "FocusCatalog Title";
+  img.style.maxHeight = "60px";
+  img.style.display = "block";
+  img.src = "TITLE.png";
+  img.onload = () => { box.innerHTML = ""; box.appendChild(img); };
+})();
+
+async function fetchJSON(url){ const r=await fetch(url); if(!r.ok) throw new Error(`HTTP ${r.status}`); return await r.json(); }
+async function loadItems(bust=false){
+  try{ const data=await fetchJSON(`${API}/index${bust?`?ts=${Date.now()}`:""}`); state.items=data.items||[]; render(); return; }
+  catch(e){}
+  try{ const data=await fetchJSON(`./index.json${bust?`?ts=${Date.now()}`:""}`); state.items=data.items||[]; render(); }
+  catch(e){ alert("Impossibile caricare index.json.\nAvvia server.py oppure apri la pagina con un server statico locale."); }
+}
+
+/* Wiring UI */
+document.getElementById('q').addEventListener('input', e=>{ state.q=e.target.value.trim(); render(); });
+document.getElementById('sort').addEventListener('change', e=>{ state.sort=e.target.value; render(); });
+document.getElementById('per').addEventListener('change', e=>{ state.pageSize=parseInt(e.target.value,10)||96; render(); });
+state.pageSize = parseInt(document.getElementById('per').value, 10) || 96;
+document.getElementById('refreshBtn').addEventListener('click', doRefresh);
+
+document.querySelectorAll('.tab[data-type]').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab[data-type]').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    state.type = el.dataset.type || "";
+    render();
+  });
+});
+
+window.addEventListener('resize', ()=>{ requestAnimationFrame(fitFilenameBoxes); });
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(()=>requestAnimationFrame(fitFilenameBoxes));
+}
+
+/* Sync cross-tab: NSFW/favs + lingua */
+window.addEventListener('storage', (ev)=>{
+  if(ev.key === LS_NSFW_SHOW){
+    state.showNSFW = (ev.newValue || 'hide') === 'show';
+    render();
+  } else if (ev.key === LS_NSFW_FLAGS){
+    try { state.nsfw = JSON.parse(ev.newValue || "{}"); } catch { state.nsfw = {}; }
+    render();
+  } else if (ev.key === LS_FAVS){
+    try { state.favorites = new Set(JSON.parse(ev.newValue || "[]")); } catch {}
+    render();
+  } else if (ev.key === LS_LANG || ev.key === LS_LANG + '_ping'){
+    applyI18n(); render();
+  }
+});
+
+/* Init */
+applyI18n();
+loadItems();
+</script>
+</body>
+</html>

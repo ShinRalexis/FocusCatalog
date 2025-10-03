@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FocusCatalog - Help</title>
+
+<!-- Favicon cuore come index -->
+<link rel="icon" type="image/svg+xml"
+      href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><text x="50%" y="78%" font-size="100" text-anchor="middle">❤️</text></svg>'/>
+
+<style>
+  :root { --bg:#0b0c10; --fg:#e8eaf0; --muted:#aeb3c2; --card:#141722; --edge:#262a36; --accent:#4c7dff; --chip:#10131b; --header-h:78px; }
+  * { box-sizing:border-box }
+  html, body { height:100% }
+  /* PATCH: offset per anchor sotto header sticky + smooth scroll */
+  html { scroll-padding-top: calc(var(--header-h) + 12px); scroll-behavior:smooth; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
+  body::before{ content:""; position:fixed; inset:0; background-image:url("BG.png"); background-size:cover; background-position:center; opacity:.10; pointer-events:none; z-index:-1; }
+
+  header { position:sticky; top:0; z-index:50; background:linear-gradient(180deg, rgba(11,12,16,.96), rgba(11,12,16,.90)); border-bottom:1px solid var(--edge) }
+  .wrap { max-width:1180px; margin:0 auto; padding:16px }
+  .topbar { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap }
+  .title { display:flex; align-items:center; gap:10px }
+  .title h1 { margin:0; font-size:22px; }
+  .actions { display:flex; gap:8px; flex-wrap:wrap }
+  a.btn, button.btn { border:1px solid var(--edge); background:#10131b; color:#fff; padding:8px 10px; border-radius:10px; text-decoration:none; font-size:13px; cursor:pointer }
+  a.btn:hover, button.btn:hover { border-color:#2f3546 }
+  .back { width:40px; height:40px; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; }
+
+  main { max-width:1180px; margin:0 auto; padding:16px; display:grid; grid-template-columns: 280px 1fr; gap:16px }
+  @media (max-width: 980px){
+    main { grid-template-columns: 1fr; }
+    :root { --header-h:86px; }
+  }
+
+  /* Sidebar TOC */
+  .toc { position:sticky; top:calc(var(--header-h)); align-self:start; background:rgba(20,23,34,.88); border:1px solid var(--edge); border-radius:16px; padding:14px }
+  .toc h2 { margin:0 0 8px; font-size:14px; letter-spacing:.03em; color:#c8d0ff }
+  .toc a { display:block; color:var(--muted); text-decoration:none; padding:6px 8px; border-radius:8px; }
+  .toc a:hover { background:#11141d; color:#fff }
+  .toc .sep { margin:8px 0; border-top:1px dashed #2e3344 }
+
+  /* Article */
+  .doc { min-width:0 }
+  .card { background:rgba(20,23,34,.88); border:1px solid var(--edge); border-radius:16px; padding:18px; margin-bottom:16px }
+  .card[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
+  .card h2 { margin:0 0 10px; font-size:18px }
+  .card h3 { margin:18px 0 8px; font-size:16px }
+  p { margin:10px 0 }
+  ul, ol { margin:10px 0 10px 20px }
+
+  code, kbd { background:#0f1118; border:1px solid #2f3546; border-radius:6px; padding:.1em .35em; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  pre { background:#0f1118; border:1px solid #2f3546; border-radius:12px; padding:12px; overflow:auto; position:static; margin:0; }
+  pre code { border:none; padding:0; background:transparent; white-space:pre; }
+
+  .prewrap { position:relative; margin:0 0 10px 0; }
+  .prewrap .copy { position:absolute; top:8px; right:8px; z-index:2; font-size:12px; }
+  .prewrap pre { padding-top:40px; }
+
+  .chips { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px }
+  .chip { border:1px solid var(--edge); border-radius:999px; padding:4px 8px; font-size:12px; color:#aeb3c2; background:var(--chip) }
+
+  .notice { border-left:3px solid #4c7dff; padding-left:12px; color:#d9e0ff }
+  .muted { color:var(--muted) }
+
+  .footer { margin-top:24px; color:var(--muted); font-size:12px; text-align:center }
+
+  .hero { padding:0; overflow:hidden }
+  .hero img { display:block; width:100%; height:auto; border-radius:16px }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap topbar">
+    <div class="title">
+      <a href="index.html" class="btn back" title="Torna al catalogo" data-i18n-title="nav.back_title">⬅️</a>
+      <h1 data-i18n="header.title">❤️ FocusCatalog — Help / Prompt Manual</h1>
+    </div>
+    <div class="actions">
+      <a class="btn" href="index.html" title="Catalogo" data-i18n="actions.catalog" data-i18n-title="actions.catalog_title">Catalogo</a>
+      <a class="btn" href="options.html" title="Opzioni" data-i18n="actions.options" data-i18n-title="actions.options_title">⚙️ Opzioni</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- TOC -->
+  <nav class="toc">
+    <h2 data-i18n="toc.title">Indice</h2>
+    <a href="#principi" data-i18n="toc.0">0) Principi chiave</a>
+    <a href="#struttura" data-i18n="toc.1">1) Struttura del prompt</a>
+    <a href="#vocabolario" data-i18n="toc.2">2) Vocabolario essenziale</a>
+    <a href="#pos-vs-neg" data-i18n="toc.3">3) Positivo vs Negativo</a>
+    <a href="#weighting" data-i18n="toc.4">4) Enfasi & pesi</a>
+    <a href="#coerenza" data-i18n="toc.5">5) Coerenza della scena</a>
+    <a href="#template" data-i18n="toc.6">6) Template pronti</a>
+    <a href="#lora" data-i18n="toc.7">7) LoRA & trigger</a>
+    <a href="#workflow" data-i18n="toc.8">8) Workflow consigliato</a>
+    <a href="#trucchi" data-i18n="toc.9">9) Trucchi da pro</a>
+    <a href="#troubleshoot" data-i18n="toc.10">10) Troubleshooting</a>
+    <a href="#reference" data-i18n="toc.11">11) Mini-reference</a>
+    <div class="sep"></div>
+    <a href="#fooocus-extra" data-i18n="toc.12">12) Fooocus: extra utili</a>
+    <a href="#checklist" data-i18n="toc.13">13) Checklist finale</a>
+  </nav>
+
+  <!-- DOC -->
+  <article class="doc">
+
+    <!-- HERO IMAGE -->
+    <section class="card hero" data-i18n-aria="hero.aria" aria-label="Academy Title">
+      <img src="academytitle.png" alt="FocusCatalog Academy Title" data-i18n-alt="hero.alt">
+    </section>
+
+    <section id="principi" class="card">
+      <h2 data-i18n="sec.principi.title">0) Principi chiave</h2>
+      <ul data-i18n-html="sec.principi.list">
+        <li><strong>Scrivi in inglese</strong> per risultati più coerenti.</li>
+        <li><strong>Sii specifico ma breve</strong>: poche parole giuste &gt; muri di testo.</li>
+        <li><strong>Schema da fotografo</strong>: soggetto, azione, luogo, luce, inquadratura, stile.</li>
+        <li><strong>Negative prompt</strong> per rimuovere difetti.</li>
+        <li><strong>Itera</strong>: genera → affina un elemento per volta.</li>
+        <li><strong>Stili di Fooocus</strong>: pratici, ma disattivali se vuoi controllo totale.</li>
+      </ul>
+    </section>
+
+    <section id="struttura" class="card">
+      <h2 data-i18n="sec.struttura.title">1) Struttura del prompt</h2>
+      <p class="notice" data-i18n="sec.struttura.formula"><strong>Formula</strong> — <em>Subject — Action — Scene/Setting — Lighting/Mood — Camera/Framing — Style/Medium — Details/Quality — LoRA triggers</em></p>
+      <pre><code>a 25-year-old woman, soft smile — sitting on a vintage armchair in a cozy room — warm golden hour light — 85mm lens, shallow depth of field, close-up portrait — cinematic, film photography — freckles, detailed skin — (film grain:1.1)</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="a 25-year-old woman, soft smile — sitting on a vintage armchair in a cozy room — warm golden hour light — 85mm lens, shallow depth of field, close-up portrait — cinematic, film photography — freckles, detailed skin — (film grain:1.1)">Copia</button>
+
+      <h3 data-i18n="sec.negative.title">Negative prompt (pulizia)</h3>
+      <pre><code>blurry, low quality, jpeg artifacts — bad anatomy, deformed hands, extra fingers — text, watermark, logo — cropped, out of frame</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="blurry, low quality, jpeg artifacts — bad anatomy, deformed hands, extra fingers — text, watermark, logo — cropped, out of frame">Copia</button>
+    </section>
+
+    <section id="vocabolario" class="card">
+      <h2 data-i18n="sec.vocabolario.title">2) Vocabolario essenziale</h2>
+      <div class="chips">
+        <span class="chip">Subject</span><span class="chip">Action</span><span class="chip">Scene</span>
+        <span class="chip">Lighting</span><span class="chip">Camera</span><span class="chip">Style</span><span class="chip">Details</span>
+      </div>
+      <h3 data-i18n="sec.vocabolario.sa">Soggetto + azione</h3>
+      <p><code>a knight raising a sword</code>, <code>a dancer twirling</code>, <code>a cat sleeping on a window sill</code>, <code>two friends laughing</code>, <code>an astronaut floating in space</code></p>
+      <h3 data-i18n="sec.vocabolario.scene">Scena / Ambientazione</h3>
+      <p><code>in a misty forest</code>, <code>on a rainy neon-lit street</code>, <code>in a medieval marketplace</code>, <code>inside a cozy cafe</code>, <code>on a snowy mountain ridge</code></p>
+      <h3 data-i18n="sec.vocabolario.light">Luce / Atmosfera</h3>
+      <p><code>golden hour light</code>, <code>soft diffused light</code>, <code>dramatic lighting</code>, <code>moonlit night</code>, <code>volumetric god rays</code>, <code>neon glow</code></p>
+      <h3 data-i18n="sec.vocabolario.camera">Camera / Inquadratura</h3>
+      <p><code>close-up portrait</code>, <code>half-body</code>, <code>full-body shot</code>, <code>wide angle view</code>, <code>low angle</code>, <code>85mm lens</code>, <code>shallow depth of field</code>, <code>bokeh</code></p>
+      <h3 data-i18n="sec.vocabolario.style">Stile / Medium</h3>
+      <p><code>film photography</code>, <code>watercolor</code>, <code>oil painting</code>, <code>ink drawing</code>, <code>pixel art</code>, <code>isometric</code>, <code>ukiyo-e</code>, <code>art nouveau</code>, <code>cyberpunk</code>, <code>matte painting</code>, <code>concept art</code></p>
+      <h3 data-i18n="sec.vocabolario.details">Dettagli / Qualità</h3>
+      <p><code>highly detailed</code>, <code>intricate</code>, <code>sharp focus</code>, <code>realistic skin</code>, <code>accurate colors</code>, <code>film grain</code></p>
+    </section>
+
+    <section id="pos-vs-neg" class="card">
+      <h2 data-i18n="sec.posneg.title">3) Positivo vs Negativo</h2>
+      <p data-i18n="sec.posneg.desc"><strong>Positivo</strong> = ciò che vuoi vedere. <strong>Negativo</strong> = ciò che vuoi evitare.</p>
+      <h3 data-i18n="sec.posneg.base">Baseline negativa (riutilizza liberamente)</h3>
+      <pre><code>blurry, low quality, jpeg artifacts, noise, overexposed, underexposed,
+bad anatomy, deformed, extra fingers, missing fingers,
+text, watermark, logo, signature,
+cropped, out of frame, bad composition</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="blurry, low quality, jpeg artifacts, noise, overexposed, underexposed, bad anatomy, deformed, extra fingers, missing fingers, text, watermark, logo, signature, cropped, out of frame, bad composition">Copia</button>
+    </section>
+
+    <section id="weighting" class="card">
+      <h2 data-i18n="sec.weighting.title">4) Enfasi & pesi</h2>
+      <ul data-i18n-html="sec.weighting.list">
+        <li><code>(word)</code> / <code>((word))</code> = più importanza</li>
+        <li><code>[word]</code> = meno importanza</li>
+        <li><code>(word:1.3)</code> = peso preciso (1.0 normale)</li>
+      </ul>
+      <pre><code>a (blue:1.2) cat near a (red:1.2) house — background [clutter]</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="a (blue:1.2) cat near a (red:1.2) house — background [clutter]">Copia</button>
+      <p class="muted" data-i18n="sec.weighting.tip">Tip: in Fooocus seleziona la parola e usa <kbd>Ctrl</kbd> + <kbd>↑/↓</kbd> per regolare il peso.</p>
+    </section>
+
+    <section id="coerenza" class="card">
+      <h2 data-i18n="sec.coerenza.title">5) Coerenza della scena</h2>
+      <ul data-i18n-html="sec.coerenza.list">
+        <li><strong>Chi fa cosa, dove e come</strong> (azione + luogo + luce + inquadratura).</li>
+        <li><strong>Una sola estetica centrale</strong> (evita troppi stili opposti).</li>
+        <li><strong>Specificare l’inquadratura</strong> aiuta (full-body, side by side, ecc.).</li>
+        <li><strong>Luce coerente</strong> per tutti gli oggetti in scena.</li>
+      </ul>
+    </section>
+
+    <section id="template" class="card">
+      <h2 data-i18n="sec.template.title">6) Template pronti</h2>
+
+      <h3 data-i18n="sec.template.portrait">Ritratto realistico</h3>
+      <pre><code>a 28-year-old woman, subtle smile — indoor studio — soft diffused light — 
+85mm lens, close-up portrait, shallow depth of field — film photography, cinematic — 
+natural skin texture, freckles, catchlights in the eyes</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="a 28-year-old woman, subtle smile — indoor studio — soft diffused light — 85mm lens, close-up portrait, shallow depth of field — film photography, cinematic — natural skin texture, freckles, catchlights in the eyes">Copia</button>
+
+      <pre><code>blurry, low quality, harsh lighting, overexposed, 
+bad anatomy, deformed, text, watermark, logo, 
+cartoon, cgi, 3d render, painting</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="blurry, low quality, harsh lighting, overexposed, bad anatomy, deformed, text, watermark, logo, cartoon, cgi, 3d render, painting">Copia</button>
+
+      <h3 data-i18n="sec.template.fantasy">Fantasy epico</h3>
+      <pre><code>an elven archer standing on a cliff — vast misty forest valley below — 
+dramatic backlight, volumetric god rays — wide angle view — 
+highly detailed, cinematic, matte painting, epic fantasy style</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="an elven archer standing on a cliff — vast misty forest valley below — dramatic backlight, volumetric god rays — wide angle view — highly detailed, cinematic, matte painting, epic fantasy style">Copia</button>
+
+      <pre><code>low quality, blurry, washed colors, text, watermark, logo, 
+sci-fi tech, cyberpunk elements</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="low quality, blurry, washed colors, text, watermark, logo, sci-fi tech, cyberpunk elements">Copia</button>
+
+      <h3 data-i18n="sec.template.cyberpunk">Cyberpunk urbano</h3>
+      <pre><code>a lone detective walking in the rain — neon-lit alley in a futuristic city — 
+moody atmosphere, wet asphalt reflections — 35mm lens, medium shot — 
+cyberpunk, cinematic still, high contrast, vibrant neon colors</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="a lone detective walking in the rain — neon-lit alley in a futuristic city — moody atmosphere, wet asphalt reflections — 35mm lens, medium shot — cyberpunk, cinematic still, high contrast, vibrant neon colors">Copia</button>
+
+      <pre><code>low quality, blurry, watercolor, oil painting, 
+text, watermark, logo, 
+daylight, sunny</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="low quality, blurry, watercolor, oil painting, text, watermark, logo, daylight, sunny">Copia</button>
+
+      <h3 data-i18n="sec.template.anime">Stile anime</h3>
+      <pre><code>a schoolgirl holding an umbrella — rainy street, night city — 
+soft rim light, bokeh — anime illustration, clean lineart, vibrant colors, 
+full-body shot, dynamic pose</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="a schoolgirl holding an umbrella — rainy street, night city — soft rim light, bokeh — anime illustration, clean lineart, vibrant colors, full-body shot, dynamic pose">Copia</button>
+
+      <pre><code>blurry, low quality, messy lineart, low contrast, 
+text, watermark, logo</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="blurry, low quality, messy lineart, low contrast, text, watermark, logo">Copia</button>
+
+      <h3 data-i18n="sec.template.product">Prodotto / e-commerce</h3>
+      <pre><code>a pair of running shoes — seamless white background — 
+soft even lighting, studio setup, shadow under object — 
+product photography, crisp details, true-to-life colors</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="a pair of running shoes — seamless white background — soft even lighting, studio setup, shadow under object — product photography, crisp details, true-to-life colors">Copia</button>
+
+      <pre><code>low quality, blurry, watermark, logo, text, 
+busy background, props, human hands</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="low quality, blurry, watermark, logo, text, busy background, props, human hands">Copia</button>
+    </section>
+
+    <section id="lora" class="card">
+      <h2 data-i18n="sec.lora.title">7) LoRA & trigger words</h2>
+      <ul data-i18n-html="sec.lora.list">
+        <li>Seleziona i <strong>LoRA</strong> dall’interfaccia (fino a 5). Peso consigliato: <code>0.2–1.0</code>.</li>
+        <li><strong>Inserisci le trigger words</strong> nel prompt (spesso cruciali per attivarne lo stile/soggetto).</li>
+        <li><strong>Combina con giudizio</strong>: 1 LoRA di soggetto + 1 di stile è un setup robusto.</li>
+      </ul>
+      <pre><code>portrait of a woman — studio soft light — film photography — (film grain:1.1)
+— triggers: film photography, black and white</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="portrait of a woman — studio soft light — film photography — (film grain:1.1) — triggers: film photography, black and white">Copia</button>
+      <p class="muted" data-i18n="sec.lora.tip">Tip: usa FocusCatalog per vedere e copiare rapidamente le trigger words dei tuoi LoRA.</p>
+    </section>
+
+    <section id="workflow" class="card">
+      <h2 data-i18n="sec.workflow.title">8) Workflow consigliato</h2>
+      <ol data-i18n-html="sec.workflow.list">
+        <li>Prompt minimo → genera 1 immagine (seed Random).</li>
+        <li>Fissa il seed → modifica <em>un</em> elemento per volta.</li>
+        <li>Aggiungi/affina il <strong>negative</strong> solo per difetti visti.</li>
+        <li>Applica <strong>LoRA</strong> + <strong>trigger words</strong> se necessari.</li>
+        <li>Usa <strong>Vary Subtle/Strong</strong> per varianti controllate.</li>
+        <li><strong>Inpainting</strong> per correzioni locali.</li>
+        <li><strong>Upscale 2×</strong> per il risultato finale.</li>
+      </ol>
+    </section>
+
+    <section id="trucchi" class="card">
+      <h2 data-i18n="sec.trucchi.title">9) Trucchi da pro</h2>
+      <ul data-i18n-html="sec.trucchi.list">
+        <li><strong>Opposti nel negativo</strong> (es. vuoi colori vividi → <code>muted colors</code> nel negativo).</li>
+        <li><strong>Pesi moderati</strong> <code>(keyword:1.2–1.4)</code> bastano nel 90% dei casi.</li>
+        <li><strong>Stili Fooocus</strong>: disattiva “Default” se copre lo stile scelto.</li>
+        <li><strong>Wildcard</strong> per esplorare varianti (<code>__subject__</code> da liste).</li>
+        <li><strong>Evita la “lista della spesa” infinita</strong>: focalizza l’intento.</li>
+      </ul>
+    </section>
+
+    <section id="troubleshoot" class="card">
+      <h2 data-i18n="sec.troubleshoot.title">10) Troubleshooting</h2>
+      <table style="width:100%; border-collapse:collapse; border:1px solid var(--edge)">
+        <tbody data-i18n-html="sec.troubleshoot.tbody">
+          <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Mani/dita sbagliate</strong></td><td style="padding:8px">Negative: <code>bad hands, deformed, extra fingers</code>, inpainting mani, riduci peso LoRA pesante</td></tr>
+          <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Composizione incoerente</strong></td><td style="padding:8px">Esplicita posizioni/relazioni: <code>two people, full-body, standing side by side</code></td></tr>
+          <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Troppo “cartoon”</strong></td><td style="padding:8px">Negative: <code>cartoon, cgi, illustration</code>; stile “Realistic”; togli preset artistici</td></tr>
+          <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Sfocato/slavato</strong></td><td style="padding:8px"><code>sharp focus, high contrast, natural colors</code>; specifica luce chiara</td></tr>
+          <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Prompt lungo inefficace</strong></td><td style="padding:8px">Riduci, usa weighting su 1–2 keyword forti</td></tr>
+          <tr><td style="padding:8px"><strong>Non rispetta la posa</strong></td><td style="padding:8px">Image Prompt con PyraCanny/CPDS (peso ~0.4–0.6)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="reference" class="card">
+      <h2 data-i18n="sec.reference.title">11) Mini-reference</h2>
+      <h3 data-i18n="sec.reference.photo">Qualità fotografica</h3>
+      <pre><code>photorealistic, sharp focus, detailed skin, accurate colors, film photography, 85mm lens, shallow depth of field, catchlights</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="photorealistic, sharp focus, detailed skin, accurate colors, film photography, 85mm lens, shallow depth of field, catchlights">Copia</button>
+
+      <h3 data-i18n="sec.reference.moods">Atmosfere rapide</h3>
+      <pre><code>warm golden hour, soft glow</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="warm golden hour, soft glow">Copia</button>
+
+      <pre><code>dramatic lighting, high contrast, rim light</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="dramatic lighting, high contrast, rim light">Copia</button>
+
+      <pre><code>neon-lit, wet asphalt reflections, moody</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="neon-lit, wet asphalt reflections, moody">Copia</button>
+
+      <h3 data-i18n="sec.reference.negative">Negativo base (realistico)</h3>
+      <pre><code>blurry, low quality, jpeg artifacts, overexposed, underexposed,
+bad anatomy, deformed, text, watermark, logo,
+cartoon, cgi, 3d render, illustration,
+cropped, out of frame</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="blurry, low quality, jpeg artifacts, overexposed, underexposed, bad anatomy, deformed, text, watermark, logo, cartoon, cgi, 3d render, illustration, cropped, out of frame">Copia</button>
+
+      <h3 data-i18n="sec.reference.skeleton">Scheletro multi-soggetto</h3>
+      <pre><code>two characters, full-body, standing side by side — 
+first: a knight in steel armor — 
+second: a mage with a staff — 
+at dusk on a windy cliff — 
+dramatic backlight, wide angle, cinematic still</code></pre>
+      <button class="btn copy" data-i18n="btn.copy" data-copy="two characters, full-body, standing side by side — first: a knight in steel armor — second: a mage with a staff — at dusk on a windy cliff — dramatic backlight, wide angle, cinematic still">Copia</button>
+    </section>
+
+    <section id="fooocus-extra" class="card">
+      <h2 data-i18n="sec.fooocus.title">12) Fooocus: extra utili (in breve)</h2>
+      <ul data-i18n-html="sec.fooocus.list">
+        <li><strong>Stili</strong>: macro-prompt automatici. Se non “si sentono”, togli “Default”.</li>
+        <li><strong>Input Image → Image Prompt</strong>: guida con riferimenti. <em>PyraCanny/CPDS = ControlNet-like</em>.</li>
+        <li><strong>FaceSwap</strong>: volto coerente tra immagini.</li>
+        <li><strong>Inpainting/Outpainting</strong>: correzioni locali / estensioni.</li>
+        <li><strong>Upscale (Enhance)</strong>: 2× qualità per il finale.</li>
+        <li><strong>Seed</strong>: disattiva Random per confronti precisi.</li>
+      </ul>
+    </section>
+
+    <section id="checklist" class="card">
+      <h2 data-i18n="sec.checklist.title">13) Checklist finale</h2>
+      <ul data-i18n-html="sec.checklist.list">
+        <li>✓ Soggetto principale subito chiaro</li>
+        <li>✓ Azione/relazioni esplicite (<em>who does what where</em>)</li>
+        <li>✓ Luce e inquadratura specificate</li>
+        <li>✓ Stile coerente (no mix caotici)</li>
+        <li>✓ Negative prompt pulito ma non eccessivo</li>
+        <li>✓ (Se serve) LoRA + trigger words nel prompt</li>
+        <li>✓ Seed fisso per iterare con metodo</li>
+      </ul>
+    </section>
+
+    <div class="footer" data-i18n="footer.text">MetaDarko. Scritto con cura per rendere i tuoi prompt più chiari, coerenti e potenti.</div>
+  </article>
+</main>
+
+<script>
+/* ===== i18n overlay ===== */
+const LS_LANG = 'focus_lang_v1';
+const SUPPORTED = ['it','en','es','fr'];
+
+const I18N = {
+  it: {
+    'nav.back_title':'Torna al catalogo',
+    'header.title':'❤️ FocusCatalog — Help / Prompt Manual',
+    'actions.catalog':'Catalogo',
+    'actions.catalog_title':'Catalogo',
+    'actions.options':'⚙️ Opzioni',
+    'actions.options_title':'Opzioni',
+    'toc.title':'Indice',
+    'toc.0':'0) Principi chiave',
+    'toc.1':'1) Struttura del prompt',
+    'toc.2':'2) Vocabolario essenziale',
+    'toc.3':'3) Positivo vs Negativo',
+    'toc.4':'4) Enfasi & pesi',
+    'toc.5':'5) Coerenza della scena',
+    'toc.6':'6) Template pronti',
+    'toc.7':'7) LoRA & trigger',
+    'toc.8':'8) Workflow consigliato',
+    'toc.9':'9) Trucchi da pro',
+    'toc.10':'10) Troubleshooting',
+    'toc.11':'11) Mini-reference',
+    'toc.12':'12) Fooocus: extra utili',
+    'toc.13':'13) Checklist finale',
+    'hero.aria':'Titolo Academy',
+    'hero.alt':'FocusCatalog Academy Title',
+    'btn.copy':'Copia',
+    'btn.copied':'Copiato!',
+    'sec.principi.title':'0) Principi chiave',
+    'sec.principi.list': `
+      <li><strong>Scrivi in inglese</strong> per risultati più coerenti.</li>
+      <li><strong>Sii specifico ma breve</strong>: poche parole giuste &gt; muri di testo.</li>
+      <li><strong>Schema da fotografo</strong>: soggetto, azione, luogo, luce, inquadratura, stile.</li>
+      <li><strong>Negative prompt</strong> per rimuovere difetti.</li>
+      <li><strong>Itera</strong>: genera → affina un elemento per volta.</li>
+      <li><strong>Stili di Fooocus</strong>: pratici, ma disattivali se vuoi controllo totale.</li>
+    `,
+    'sec.struttura.title':'1) Struttura del prompt',
+    'sec.struttura.formula':'<strong>Formula</strong> — <em>Subject — Action — Scene/Setting — Lighting/Mood — Camera/Framing — Style/Medium — Details/Quality — LoRA triggers</em>',
+    'sec.negative.title':'Negative prompt (pulizia)',
+    'sec.vocabolario.title':'2) Vocabolario essenziale',
+    'sec.vocabolario.sa':'Soggetto + azione',
+    'sec.vocabolario.scene':'Scena / Ambientazione',
+    'sec.vocabolario.light':'Luce / Atmosfera',
+    'sec.vocabolario.camera':'Camera / Inquadratura',
+    'sec.vocabolario.style':'Stile / Medium',
+    'sec.vocabolario.details':'Dettagli / Qualità',
+    'sec.posneg.title':'3) Positivo vs Negativo',
+    'sec.posneg.desc':'<strong>Positivo</strong> = ciò che vuoi vedere. <strong>Negativo</strong> = ciò che vuoi evitare.',
+    'sec.posneg.base':'Baseline negativa (riutilizza liberamente)',
+    'sec.weighting.title':'4) Enfasi & pesi',
+    'sec.weighting.list': `
+      <li><code>(word)</code> / <code>((word))</code> = più importanza</li>
+      <li><code>[word]</code> = meno importanza</li>
+      <li><code>(word:1.3)</code> = peso preciso (1.0 normale)</li>
+    `,
+    'sec.weighting.tip':'Tip: in Fooocus seleziona la parola e usa <kbd>Ctrl</kbd> + <kbd>↑/↓</kbd> per regolare il peso.',
+    'sec.coerenza.title':'5) Coerenza della scena',
+    'sec.coerenza.list': `
+      <li><strong>Chi fa cosa, dove e come</strong> (azione + luogo + luce + inquadratura).</li>
+      <li><strong>Una sola estetica centrale</strong> (evita troppi stili opposti).</li>
+      <li><strong>Specificare l’inquadratura</strong> aiuta (full-body, side by side, ecc.).</li>
+      <li><strong>Luce coerente</strong> per tutti gli oggetti in scena.</li>
+    `,
+    'sec.template.title':'6) Template pronti',
+    'sec.template.portrait':'Ritratto realistico',
+    'sec.template.fantasy':'Fantasy epico',
+    'sec.template.cyberpunk':'Cyberpunk urbano',
+    'sec.template.anime':'Stile anime',
+    'sec.template.product':'Prodotto / e-commerce',
+    'sec.lora.title':'7) LoRA & trigger words',
+    'sec.lora.list': `
+      <li>Seleziona i <strong>LoRA</strong> dall’interfaccia (fino a 5). Peso consigliato: <code>0.2–1.0</code>.</li>
+      <li><strong>Inserisci le trigger words</strong> nel prompt (spesso cruciali per attivarne lo stile/soggetto).</li>
+      <li><strong>Combina con giudizio</strong>: 1 LoRA di soggetto + 1 di stile è un setup robusto.</li>
+    `,
+    'sec.lora.tip':'Tip: usa FocusCatalog per vedere e copiare rapidamente le trigger words dei tuoi LoRA.',
+    'sec.workflow.title':'8) Workflow consigliato',
+    'sec.workflow.list': `
+      <li>Prompt minimo → genera 1 immagine (seed Random).</li>
+      <li>Fissa il seed → modifica <em>un</em> elemento per volta.</li>
+      <li>Aggiungi/affina il <strong>negative</strong> solo per difetti visti.</li>
+      <li>Applica <strong>LoRA</strong> + <strong>trigger words</strong> se necessari.</li>
+      <li>Usa <strong>Vary Subtle/Strong</strong> per varianti controllate.</li>
+      <li><strong>Inpainting</strong> per correzioni locali.</li>
+      <li><strong>Upscale 2×</strong> per il risultato finale.</li>
+    `,
+    'sec.trucchi.title':'9) Trucchi da pro',
+    'sec.trucchi.list': `
+      <li><strong>Opposti nel negativo</strong> (es. vuoi colori vividi → <code>muted colors</code> nel negativo).</li>
+      <li><strong>Pesi moderati</strong> <code>(keyword:1.2–1.4)</code> bastano nel 90% dei casi.</li>
+      <li><strong>Stili Fooocus</strong>: disattiva “Default” se copre lo stile scelto.</li>
+      <li><strong>Wildcard</strong> per esplorare varianti (<code>__subject__</code> da liste).</li>
+      <li><strong>Evita la “lista della spesa” infinita</strong>: focalizza l’intento.</li>
+    `,
+    'sec.troubleshoot.title':'10) Troubleshooting',
+    'sec.troubleshoot.tbody': `
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Mani/dita sbagliate</strong></td><td style="padding:8px">Negative: <code>bad hands, deformed, extra fingers</code>, inpainting mani, riduci peso LoRA pesante</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Composizione incoerente</strong></td><td style="padding:8px">Esplicita posizioni/relazioni: <code>two people, full-body, standing side by side</code></td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Troppo “cartoon”</strong></td><td style="padding:8px">Negative: <code>cartoon, cgi, illustration</code>; stile “Realistic”; togli preset artistici</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Sfocato/slavato</strong></td><td style="padding:8px"><code>sharp focus, high contrast, natural colors</code>; specifica luce chiara</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Prompt lungo inefficace</strong></td><td style="padding:8px">Riduci, usa weighting su 1–2 keyword forti</td></tr>
+      <tr><td style="padding:8px"><strong>Non rispetta la posa</strong></td><td style="padding:8px">Image Prompt con PyraCanny/CPDS (peso ~0.4–0.6)</td></tr>
+    `,
+    'sec.reference.title':'11) Mini-reference',
+    'sec.reference.photo':'Qualità fotografica',
+    'sec.reference.moods':'Atmosfere rapide',
+    'sec.reference.negative':'Negativo base (realistico)',
+    'sec.reference.skeleton':'Scheletro multi-soggetto',
+    'sec.fooocus.title':'12) Fooocus: extra utili (in breve)',
+    'sec.fooocus.list': `
+      <li><strong>Stili</strong>: macro-prompt automatici. Se non “si sentono”, togli “Default”.</li>
+      <li><strong>Input Image → Image Prompt</strong>: guida con riferimenti. <em>PyraCanny/CPDS = ControlNet-like</em>.</li>
+      <li><strong>FaceSwap</strong>: volto coerente tra immagini.</li>
+      <li><strong>Inpainting/Outpainting</strong>: correzioni locali / estensioni.</li>
+      <li><strong>Upscale (Enhance)</strong>: 2× qualità per il finale.</li>
+      <li><strong>Seed</strong>: disattiva Random per confronti precisi.</li>
+    `,
+    'sec.checklist.title':'13) Checklist finale',
+    'sec.checklist.list': `
+      <li>✓ Soggetto principale subito chiaro</li>
+      <li>✓ Azione/relazioni esplicite (<em>who does what where</em>)</li>
+      <li>✓ Luce e inquadratura specificate</li>
+      <li>✓ Stile coerente (no mix caotici)</li>
+      <li>✓ Negative prompt pulito ma non eccessivo</li>
+      <li>✓ (Se serve) LoRA + trigger words nel prompt</li>
+      <li>✓ Seed fisso per iterare con metodo</li>
+    `,
+    'footer.text':'MetaDarko. Scritto con cura per rendere i tuoi prompt più chiari, coerenti e potenti.'
+  },
+  en: {
+    'nav.back_title':'Back to catalog',
+    'header.title':'❤️ FocusCatalog — Help / Prompt Manual',
+    'actions.catalog':'Catalog',
+    'actions.catalog_title':'Catalog',
+    'actions.options':'⚙️ Options',
+    'actions.options_title':'Options',
+    'toc.title':'Index',
+    'toc.0':'0) Key principles',
+    'toc.1':'1) Prompt structure',
+    'toc.2':'2) Essential vocabulary',
+    'toc.3':'3) Positive vs Negative',
+    'toc.4':'4) Emphasis & weights',
+    'toc.5':'5) Scene coherence',
+    'toc.6':'6) Ready-made templates',
+    'toc.7':'7) LoRA & triggers',
+    'toc.8':'8) Recommended workflow',
+    'toc.9':'9) Pro tips',
+    'toc.10':'10) Troubleshooting',
+    'toc.11':'11) Mini reference',
+    'toc.12':'12) Fooocus: useful extras',
+    'toc.13':'13) Final checklist',
+    'hero.aria':'Academy Title',
+    'hero.alt':'FocusCatalog Academy Title',
+    'btn.copy':'Copy',
+    'btn.copied':'Copied!',
+    'sec.principi.title':'0) Key principles',
+    'sec.principi.list': `
+      <li><strong>Write in English</strong> for more consistent results.</li>
+      <li><strong>Be specific but concise</strong>: a few right words &gt; walls of text.</li>
+      <li><strong>Think like a photographer</strong>: subject, action, location, light, framing, style.</li>
+      <li><strong>Use a negative prompt</strong> to remove defects.</li>
+      <li><strong>Iterate</strong>: generate → refine one element at a time.</li>
+      <li><strong>Fooocus styles</strong>: handy, but disable them if you want full control.</li>
+    `,
+    'sec.struttura.title':'1) Prompt structure',
+    'sec.struttura.formula':'<strong>Formula</strong> — <em>Subject — Action — Scene/Setting — Lighting/Mood — Camera/Framing — Style/Medium — Details/Quality — LoRA triggers</em>',
+    'sec.negative.title':'Negative prompt (cleanup)',
+    'sec.vocabolario.title':'2) Essential vocabulary',
+    'sec.vocabolario.sa':'Subject + action',
+    'sec.vocabolario.scene':'Scene / Setting',
+    'sec.vocabolario.light':'Light / Mood',
+    'sec.vocabolario.camera':'Camera / Framing',
+    'sec.vocabolario.style':'Style / Medium',
+    'sec.vocabolario.details':'Details / Quality',
+    'sec.posneg.title':'3) Positive vs Negative',
+    'sec.posneg.desc':'<strong>Positive</strong> = what you want to see. <strong>Negative</strong> = what you want to avoid.',
+    'sec.posneg.base':'Negative baseline (reuse freely)',
+    'sec.weighting.title':'4) Emphasis & weights',
+    'sec.weighting.list': `
+      <li><code>(word)</code> / <code>((word))</code> = more importance</li>
+      <li><code>[word]</code> = less importance</li>
+      <li><code>(word:1.3)</code> = exact weight (1.0 normal)</li>
+    `,
+    'sec.weighting.tip':'Tip: in Fooocus select the word and use <kbd>Ctrl</kbd> + <kbd>↑/↓</kbd> to adjust its weight.',
+    'sec.coerenza.title':'5) Scene coherence',
+    'sec.coerenza.list': `
+      <li><strong>Who does what, where and how</strong> (action + place + light + framing).</li>
+      <li><strong>One central aesthetic</strong> (avoid too many conflicting styles).</li>
+      <li><strong>Specify the framing</strong> (full-body, side by side, etc.).</li>
+      <li><strong>Consistent lighting</strong> for every object in the scene.</li>
+    `,
+    'sec.template.title':'6) Ready-made templates',
+    'sec.template.portrait':'Realistic portrait',
+    'sec.template.fantasy':'Epic fantasy',
+    'sec.template.cyberpunk':'Urban cyberpunk',
+    'sec.template.anime':'Anime style',
+    'sec.template.product':'Product / e-commerce',
+    'sec.lora.title':'7) LoRA & trigger words',
+    'sec.lora.list': `
+      <li>Select <strong>LoRA</strong> from the UI (up to 5). Recommended weight: <code>0.2–1.0</code>.</li>
+      <li><strong>Add trigger words</strong> to the prompt (often crucial to activate subject/style).</li>
+      <li><strong>Combine wisely</strong>: 1 subject LoRA + 1 style LoRA is a robust setup.</li>
+    `,
+    'sec.lora.tip':'Tip: use FocusCatalog to quickly view and copy your LoRA trigger words.',
+    'sec.workflow.title':'8) Recommended workflow',
+    'sec.workflow.list': `
+      <li>Minimal prompt → generate 1 image (Random seed).</li>
+      <li>Fix the seed → change <em>one</em> element at a time.</li>
+      <li>Add/refine the <strong>negative</strong> only for defects you see.</li>
+      <li>Apply <strong>LoRA</strong> + <strong>trigger words</strong> if needed.</li>
+      <li>Use <strong>Vary Subtle/Strong</strong> for controlled variations.</li>
+      <li><strong>Inpainting</strong> for local fixes.</li>
+      <li><strong>Upscale 2×</strong> for the final result.</li>
+    `,
+    'sec.trucchi.title':'9) Pro tips',
+    'sec.trucchi.list': `
+      <li><strong>Use opposites in the negative</strong> (e.g., you want vivid colors → put <code>muted colors</code> in the negative).</li>
+      <li><strong>Moderate weights</strong> <code>(keyword:1.2–1.4)</code> are enough in 90% of cases.</li>
+      <li><strong>Fooocus styles</strong>: disable “Default” if it overrides your chosen style.</li>
+      <li><strong>Wildcards</strong> to explore variants (<code>__subject__</code> from lists).</li>
+      <li><strong>Avoid endless shopping lists</strong>: focus the intent.</li>
+    `,
+    'sec.troubleshoot.title':'10) Troubleshooting',
+    'sec.troubleshoot.tbody': `
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Wrong hands/fingers</strong></td><td style="padding:8px">Negative: <code>bad hands, deformed, extra fingers</code>, hand inpainting, reduce heavy LoRA weight</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Incoherent composition</strong></td><td style="padding:8px">Make positions/relations explicit: <code>two people, full-body, standing side by side</code></td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Too “cartoon”</strong></td><td style="padding:8px">Negative: <code>cartoon, cgi, illustration</code>; set style “Realistic”; remove artistic presets</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Blurry/washed out</strong></td><td style="padding:8px"><code>sharp focus, high contrast, natural colors</code>; specify clear lighting</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Ineffective long prompt</strong></td><td style="padding:8px">Shorten it; use weighting on 1–2 strong keywords</td></tr>
+      <tr><td style="padding:8px"><strong>Pose not respected</strong></td><td style="padding:8px">Image Prompt with PyraCanny/CPDS (weight ~0.4–0.6)</td></tr>
+    `,
+    'sec.reference.title':'11) Mini reference',
+    'sec.reference.photo':'Photographic quality',
+    'sec.reference.moods':'Quick moods',
+    'sec.reference.negative':'Base negative (realistic)',
+    'sec.reference.skeleton':'Multi-subject skeleton',
+    'sec.fooocus.title':'12) Fooocus: useful extras (quick)',
+    'sec.fooocus.list': `
+      <li><strong>Styles</strong>: automatic macro-prompts. If they “dominate”, disable “Default”.</li>
+      <li><strong>Input Image → Image Prompt</strong>: guidance with references. <em>PyraCanny/CPDS = ControlNet-like</em>.</li>
+      <li><strong>FaceSwap</strong>: consistent face across images.</li>
+      <li><strong>Inpainting/Outpainting</strong>: local fixes / extensions.</li>
+      <li><strong>Upscale (Enhance)</strong>: 2× quality for the final image.</li>
+      <li><strong>Seed</strong>: turn off Random for precise comparisons.</li>
+    `,
+    'sec.checklist.title':'13) Final checklist',
+    'sec.checklist.list': `
+      <li>✓ Main subject immediately clear</li>
+      <li>✓ Explicit actions/relations (<em>who does what where</em>)</li>
+      <li>✓ Lighting and framing specified</li>
+      <li>✓ Coherent style (no chaotic mixes)</li>
+      <li>✓ Clean but not excessive negative prompt</li>
+      <li>✓ (If needed) LoRA + trigger words in the prompt</li>
+      <li>✓ Fixed seed to iterate methodically</li>
+    `,
+    'footer.text':'MetaDarko. Written with care to make your prompts clearer, more coherent and powerful.'
+  },
+  es: {
+    'nav.back_title':'Volver al catálogo',
+    'header.title':'❤️ FocusCatalog — Ayuda / Manual de prompts',
+    'actions.catalog':'Catálogo',
+    'actions.catalog_title':'Catálogo',
+    'actions.options':'⚙️ Opciones',
+    'actions.options_title':'Opciones',
+    'toc.title':'Índice',
+    'toc.0':'0) Principios clave',
+    'toc.1':'1) Estructura del prompt',
+    'toc.2':'2) Vocabulario esencial',
+    'toc.3':'3) Positivo vs Negativo',
+    'toc.4':'4) Énfasis y pesos',
+    'toc.5':'5) Coherencia de la escena',
+    'toc.6':'6) Plantillas listas',
+    'toc.7':'7) LoRA y triggers',
+    'toc.8':'8) Flujo recomendado',
+    'toc.9':'9) Trucos pro',
+    'toc.10':'10) Solución de problemas',
+    'toc.11':'11) Mini referencia',
+    'toc.12':'12) Fooocus: extras útiles',
+    'toc.13':'13) Lista final',
+    'hero.aria':'Título Academy',
+    'hero.alt':'FocusCatalog Academy Title',
+    'btn.copy':'Copiar',
+    'btn.copied':'¡Copiado!',
+    'sec.principi.title':'0) Principios clave',
+    'sec.principi.list': `
+      <li><strong>Escribe en inglés</strong> para resultados más coherentes.</li>
+      <li><strong>Sé específico pero breve</strong>: pocas palabras correctas &gt; muros de texto.</li>
+      <li><strong>Enfoque de fotógrafo</strong>: sujeto, acción, lugar, luz, encuadre, estilo.</li>
+      <li><strong>Usa el negative prompt</strong> para eliminar defectos.</li>
+      <li><strong>Itera</strong>: generar → afinar un elemento a la vez.</li>
+      <li><strong>Estilos de Fooocus</strong>: útiles, pero desactívalos si quieres control total.</li>
+    `,
+    'sec.struttura.title':'1) Estructura del prompt',
+    'sec.struttura.formula':'<strong>Fórmula</strong> — <em>Subject — Action — Scene/Setting — Lighting/Mood — Camera/Framing — Style/Medium — Details/Quality — LoRA triggers</em>',
+    'sec.negative.title':'Negative prompt (limpieza)',
+    'sec.vocabolario.title':'2) Vocabulario esencial',
+    'sec.vocabolario.sa':'Sujeto + acción',
+    'sec.vocabolario.scene':'Escena / Ambientación',
+    'sec.vocabolario.light':'Luz / Atmósfera',
+    'sec.vocabolario.camera':'Cámara / Encuadre',
+    'sec.vocabolario.style':'Estilo / Medio',
+    'sec.vocabolario.details':'Detalles / Calidad',
+    'sec.posneg.title':'3) Positivo vs Negativo',
+    'sec.posneg.desc':'<strong>Positivo</strong> = lo que quieres ver. <strong>Negativo</strong> = lo que quieres evitar.',
+    'sec.posneg.base':'Base negativa (reutiliza libremente)',
+    'sec.weighting.title':'4) Énfasis y pesos',
+    'sec.weighting.list': `
+      <li><code>(word)</code> / <code>((word))</code> = más importancia</li>
+      <li><code>[word]</code> = menos importancia</li>
+      <li><code>(word:1.3)</code> = peso exacto (1.0 normal)</li>
+    `,
+    'sec.weighting.tip':'Tip: en Fooocus selecciona la palabra y usa <kbd>Ctrl</kbd> + <kbd>↑/↓</kbd> para ajustar su peso.',
+    'sec.coerenza.title':'5) Coherencia de la escena',
+    'sec.coerenza.list': `
+      <li><strong>Quién hace qué, dónde y cómo</strong> (acción + lugar + luz + encuadre).</li>
+      <li><strong>Una estética central</strong> (evita estilos en conflicto).</li>
+      <li><strong>Especifica el encuadre</strong> (full-body, side by side, etc.).</li>
+      <li><strong>Luz consistente</strong> para todos los elementos de la escena.</li>
+    `,
+    'sec.template.title':'6) Plantillas listas',
+    'sec.template.portrait':'Retrato realista',
+    'sec.template.fantasy':'Fantasía épica',
+    'sec.template.cyberpunk':'Cyberpunk urbano',
+    'sec.template.anime':'Estilo anime',
+    'sec.template.product':'Producto / e-commerce',
+    'sec.lora.title':'7) LoRA y palabras clave',
+    'sec.lora.list': `
+      <li>Selecciona <strong>LoRA</strong> en la interfaz (hasta 5). Peso recomendado: <code>0.2–1.0</code>.</li>
+      <li><strong>Incluye las trigger words</strong> en el prompt (a menudo cruciales).</li>
+      <li><strong>Combina con criterio</strong>: 1 LoRA de sujeto + 1 de estilo funciona muy bien.</li>
+    `,
+    'sec.lora.tip':'Tip: usa FocusCatalog para ver y copiar rápido las trigger words de tus LoRA.',
+    'sec.workflow.title':'8) Flujo recomendado',
+    'sec.workflow.list': `
+      <li>Prompt mínimo → genera 1 imagen (seed Random).</li>
+      <li>Fija el seed → cambia <em>un</em> elemento a la vez.</li>
+      <li>Añade/ajusta el <strong>negative</strong> solo para defectos observados.</li>
+      <li>Aplica <strong>LoRA</strong> + <strong>trigger words</strong> si hace falta.</li>
+      <li>Usa <strong>Vary Subtle/Strong</strong> para variaciones controladas.</li>
+      <li><strong>Inpainting</strong> para correcciones locales.</li>
+      <li><strong>Upscale 2×</strong> para el resultado final.</li>
+    `,
+    'sec.trucchi.title':'9) Trucos pro',
+    'sec.trucchi.list': `
+      <li><strong>Opuestos en el negativo</strong> (p. ej., quieres colores vivos → pon <code>muted colors</code> en el negativo).</li>
+      <li><strong>Pesos moderados</strong> <code>(keyword:1.2–1.4)</code> bastan en el 90% de los casos.</li>
+      <li><strong>Estilos de Fooocus</strong>: desactiva “Default” si tapa tu estilo elegido.</li>
+      <li><strong>Wildcards</strong> para explorar variantes (<code>__subject__</code> desde listas).</li>
+      <li><strong>Evita la lista interminable</strong>: enfoca la intención.</li>
+    `,
+    'sec.troubleshoot.title':'10) Solución de problemas',
+    'sec.troubleshoot.tbody': `
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Manos/dedos incorrectos</strong></td><td style="padding:8px">Negativo: <code>bad hands, deformed, extra fingers</code>, inpainting de manos, reduce peso de LoRA fuerte</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Composición incoherente</strong></td><td style="padding:8px">Haz explícitas posiciones/relaciones: <code>two people, full-body, standing side by side</code></td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Demasiado “cartoon”</strong></td><td style="padding:8px">Negativo: <code>cartoon, cgi, illustration</code>; estilo “Realistic”; quita presets artísticos</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Borroso/colores lavados</strong></td><td style="padding:8px"><code>sharp focus, high contrast, natural colors</code>; especifica luz clara</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Prompt largo ineficaz</strong></td><td style="padding:8px">Reduce; usa pesos en 1–2 keywords fuertes</td></tr>
+      <tr><td style="padding:8px"><strong>No respeta la pose</strong></td><td style="padding:8px">Image Prompt con PyraCanny/CPDS (peso ~0.4–0.6)</td></tr>
+    `,
+    'sec.reference.title':'11) Mini referencia',
+    'sec.reference.photo':'Calidad fotográfica',
+    'sec.reference.moods':'Ambientes rápidos',
+    'sec.reference.negative':'Negativo base (realista)',
+    'sec.reference.skeleton':'Esqueleto multi-sujeto',
+    'sec.fooocus.title':'12) Fooocus: extras útiles (breve)',
+    'sec.fooocus.list': `
+      <li><strong>Estilos</strong>: macro-prompts automáticos. Si “se imponen”, desactiva “Default”.</li>
+      <li><strong>Input Image → Image Prompt</strong>: guía con referencias. <em>PyraCanny/CPDS = ControlNet-like</em>.</li>
+      <li><strong>FaceSwap</strong>: rostro coherente entre imágenes.</li>
+      <li><strong>Inpainting/Outpainting</strong>: correcciones locales / extensiones.</li>
+      <li><strong>Upscale (Enhance)</strong>: 2× de calidad para el final.</li>
+      <li><strong>Seed</strong>: desactiva Random para comparaciones precisas.</li>
+    `,
+    'sec.checklist.title':'13) Lista final',
+    'sec.checklist.list': `
+      <li>✓ Sujeto principal claro desde el inicio</li>
+      <li>✓ Acciones/relaciones explícitas (<em>who does what where</em>)</li>
+      <li>✓ Luz y encuadre especificados</li>
+      <li>✓ Estilo coherente (sin mezclas caóticas)</li>
+      <li>✓ Negative prompt limpio pero no excesivo</li>
+      <li>✓ (Si hace falta) LoRA + trigger words en el prompt</li>
+      <li>✓ Seed fijo para iterar con método</li>
+    `,
+    'footer.text':'MetaDarko. Escrito con cariño para que tus prompts sean más claros, coherentes y potentes.'
+  },
+  fr: {
+    'nav.back_title':'Retour au catalogue',
+    'header.title':'❤️ FocusCatalog — Aide / Manuel de prompts',
+    'actions.catalog':'Catalogue',
+    'actions.catalog_title':'Catalogue',
+    'actions.options':'⚙️ Options',
+    'actions.options_title':'Options',
+    'toc.title':'Sommaire',
+    'toc.0':'0) Principes clés',
+    'toc.1':'1) Structure du prompt',
+    'toc.2':'2) Vocabulaire essentiel',
+    'toc.3':'3) Positif vs Négatif',
+    'toc.4':'4) Accent & pondérations',
+    'toc.5':'5) Cohérence de scène',
+    'toc.6':'6) Modèles prêts',
+    'toc.7':'7) LoRA & triggers',
+    'toc.8':'8) Workflow recommandé',
+    'toc.9':'9) Astuces pro',
+    'toc.10':'10) Dépannage',
+    'toc.11':'11) Mini-référence',
+    'toc.12':'12) Fooocus : extras utiles',
+    'toc.13':'13) Checklist finale',
+    'hero.aria':'Titre Academy',
+    'hero.alt':'FocusCatalog Academy Title',
+    'btn.copy':'Copier',
+    'btn.copied':'Copié !',
+    'sec.principi.title':'0) Principes clés',
+    'sec.principi.list': `
+      <li><strong>Écris en anglais</strong> pour des résultats plus cohérents.</li>
+      <li><strong>Sois précis mais bref</strong> : quelques bons mots &gt; des pavés de texte.</li>
+      <li><strong>Réflexe de photographe</strong> : sujet, action, lieu, lumière, cadrage, style.</li>
+      <li><strong>Utilise un negative prompt</strong> pour enlever les défauts.</li>
+      <li><strong>Itère</strong> : générer → affiner un élément à la fois.</li>
+      <li><strong>Styles Fooocus</strong> : pratiques, mais désactive-les pour un contrôle total.</li>
+    `,
+    'sec.struttura.title':'1) Structure du prompt',
+    'sec.struttura.formula':'<strong>Formule</strong> — <em>Subject — Action — Scene/Setting — Lighting/Mood — Camera/Framing — Style/Medium — Details/Quality — LoRA triggers</em>',
+    'sec.negative.title':'Negative prompt (nettoyage)',
+    'sec.vocabolario.title':'2) Vocabulaire essentiel',
+    'sec.vocabolario.sa':'Sujet + action',
+    'sec.vocabolario.scene':'Scène / Décor',
+    'sec.vocabolario.light':'Lumière / Ambiance',
+    'sec.vocabolario.camera':'Caméra / Cadrage',
+    'sec.vocabolario.style':'Style / Medium',
+    'sec.vocabolario.details':'Détails / Qualité',
+    'sec.posneg.title':'3) Positif vs Négatif',
+    'sec.posneg.desc':'<strong>Positif</strong> = ce que tu veux voir. <strong>Négatif</strong> = ce que tu veux éviter.',
+    'sec.posneg.base':'Base négative (réutilisez librement)',
+    'sec.weighting.title':'4) Accent & pondérations',
+    'sec.weighting.list': `
+      <li><code>(word)</code> / <code>((word))</code> = plus d’importance</li>
+      <li><code>[word]</code> = moins d’importance</li>
+      <li><code>(word:1.3)</code> = poids exact (1.0 normal)</li>
+    `,
+    'sec.weighting.tip':'Astuce : dans Fooocus, sélectionne le mot et utilise <kbd>Ctrl</kbd> + <kbd>↑/↓</kbd> pour régler son poids.',
+    'sec.coerenza.title':'5) Cohérence de scène',
+    'sec.coerenza.list': `
+      <li><strong>Qui fait quoi, où et comment</strong> (action + lieu + lumière + cadrage).</li>
+      <li><strong>Une esthétique centrale</strong> (évite les styles contradictoires).</li>
+      <li><strong>Spécifie le cadrage</strong> (full-body, côte à côte, etc.).</li>
+      <li><strong>Lumière cohérente</strong> pour tous les éléments de la scène.</li>
+    `,
+    'sec.template.title':'6) Modèles prêts',
+    'sec.template.portrait':'Portrait réaliste',
+    'sec.template.fantasy':'Fantasy épique',
+    'sec.template.cyberpunk':'Cyberpunk urbain',
+    'sec.template.anime':'Style anime',
+    'sec.template.product':'Produit / e-commerce',
+    'sec.lora.title':'7) LoRA & mots-clés',
+    'sec.lora.list': `
+      <li>Sélectionne les <strong>LoRA</strong> dans l’UI (jusqu’à 5). Poids recommandé : <code>0.2–1.0</code>.</li>
+      <li><strong>Ajoute les trigger words</strong> au prompt (souvent essentiels pour activer sujet/style).</li>
+      <li><strong>Combine avec discernement</strong> : 1 LoRA sujet + 1 LoRA style est une base solide.</li>
+    `,
+    'sec.lora.tip':'Astuce : utilise FocusCatalog pour voir et copier rapidement les trigger words de tes LoRA.',
+    'sec.workflow.title':'8) Workflow recommandé',
+    'sec.workflow.list': `
+      <li>Prompt minimal → génère 1 image (seed Random).</li>
+      <li>Fige le seed → change <em>un</em> élément à la fois.</li>
+      <li>Ajoute/affine le <strong>negative</strong> seulement pour les défauts observés.</li>
+      <li>Applique <strong>LoRA</strong> + <strong>trigger words</strong> si nécessaire.</li>
+      <li>Utilise <strong>Vary Subtle/Strong</strong> pour des variations contrôlées.</li>
+      <li><strong>Inpainting</strong> pour les corrections locales.</li>
+      <li><strong>Upscale 2×</strong> pour le rendu final.</li>
+    `,
+    'sec.trucchi.title':'9) Astuces pro',
+    'sec.trucchi.list': `
+      <li><strong>Opposés dans le négatif</strong> (ex. tu veux des couleurs vives → mets <code>muted colors</code> en négatif).</li>
+      <li><strong>Pondérations modérées</strong> <code>(keyword:1.2–1.4)</code> suffisent dans 90% des cas.</li>
+      <li><strong>Styles Fooocus</strong> : désactive “Default” s’il couvre ton style.</li>
+      <li><strong>Wildcards</strong> pour explorer des variantes (<code>__subject__</code> depuis des listes).</li>
+      <li><strong>Évite la liste à rallonge</strong> : focalise l’intention.</li>
+    `,
+    'sec.troubleshoot.title':'10) Dépannage',
+    'sec.troubleshoot.tbody': `
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Mains/doigts incorrects</strong></td><td style="padding:8px">Négatif : <code>bad hands, deformed, extra fingers</code>, inpainting des mains, réduire le poids d’un LoRA trop fort</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Composition incohérente</strong></td><td style="padding:8px">Rends positions/relations explicites : <code>two people, full-body, standing side by side</code></td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Trop “cartoon”</strong></td><td style="padding:8px">Négatif : <code>cartoon, cgi, illustration</code> ; style “Realistic” ; enlève les presets artistiques</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Flou/délavé</strong></td><td style="padding:8px"><code>sharp focus, high contrast, natural colors</code> ; précise une lumière claire</td></tr>
+      <tr style="border-bottom:1px solid var(--edge)"><td style="padding:8px"><strong>Prompt long inefficace</strong></td><td style="padding:8px">Raccourcis ; pondère 1–2 mots-clés forts</td></tr>
+      <tr><td style="padding:8px"><strong>Pose non respectée</strong></td><td style="padding:8px">Image Prompt avec PyraCanny/CPDS (poids ~0.4–0.6)</td></tr>
+    `,
+    'sec.reference.title':'11) Mini-référence',
+    'sec.reference.photo':'Qualité photographique',
+    'sec.reference.moods':'Ambiances rapides',
+    'sec.reference.negative':'Négatif de base (réaliste)',
+    'sec.reference.skeleton':'Squelette multi-sujet',
+    'sec.fooocus.title':'12) Fooocus : extras utiles (bref)',
+    'sec.fooocus.list': `
+      <li><strong>Styles</strong> : macro-prompts automatiques. S’ils “prennent le dessus”, désactive “Default”.</li>
+      <li><strong>Input Image → Image Prompt</strong> : guidage avec références. <em>PyraCanny/CPDS = type ControlNet</em>.</li>
+      <li><strong>FaceSwap</strong> : visage cohérent entre les images.</li>
+      <li><strong>Inpainting/Outpainting</strong> : corrections locales / extensions.</li>
+      <li><strong>Upscale (Enhance)</strong> : ×2 de qualité pour le final.</li>
+      <li><strong>Seed</strong> : désactive Random pour des comparaisons précises.</li>
+    `,
+    'sec.checklist.title':'13) Checklist finale',
+    'sec.checklist.list': `
+      <li>✓ Sujet principal immédiatement clair</li>
+      <li>✓ Actions/relations explicites (<em>who does what where</em>)</li>
+      <li>✓ Lumière et cadrage précisés</li>
+      <li>✓ Style cohérent (pas de mélange chaotique)</li>
+      <li>✓ Negative prompt propre mais sans excès</li>
+      <li>✓ (Si besoin) LoRA + trigger words dans le prompt</li>
+      <li>✓ Seed figé pour itérer méthodiquement</li>
+    `,
+    'footer.text':'MetaDarko. Rédigé avec soin pour rendre vos prompts plus clairs, cohérents et puissants.'
+  }
+};
+
+function getLang(){
+  const v = localStorage.getItem(LS_LANG) || 'it';
+  return SUPPORTED.includes(v) ? v : 'it';
+}
+function t(key){
+  const lang = getLang();
+  return (I18N[lang] && I18N[lang][key]) || I18N.it[key] || key;
+}
+function applyI18n(){
+  document.documentElement.lang = getLang();
+  // testo o HTML auto: se la stringa contiene tag, innerHTML; altrimenti textContent
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if (/<[a-z][\s\S]*>/i.test(val)) el.innerHTML = val; else el.textContent = val;
+  });
+  // innerHTML forzato
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-html');
+    el.innerHTML = t(key);
+  });
+  // attributi
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{
+    el.setAttribute('title', t(el.getAttribute('data-i18n-title')));
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>{
+    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+  });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el=>{
+    el.setAttribute('alt', t(el.getAttribute('data-i18n-alt')));
+  });
+  // Bottoni copia
+  document.querySelectorAll('button.copy').forEach(btn=>{ btn.textContent = t('btn.copy'); });
+}
+
+/* ====== Script pagina (copy buttons, overlay) ====== */
+(function fixCopyButtons(){
+  document.querySelectorAll('.card').forEach(card=>{
+    const copies = Array.from(card.querySelectorAll('button.copy'));
+    copies.forEach(btn=>{
+      const prev = btn.previousElementSibling;
+      if (!(prev && prev.tagName === 'PRE')) {
+        const pre = btn.closest('pre') || btn.parentElement.querySelector('pre');
+        if (!pre) return;
+        const wrap = document.createElement('div');
+        wrap.className = 'prewrap';
+        pre.parentNode.insertBefore(wrap, pre);
+        wrap.appendChild(pre);
+        wrap.appendChild(btn);
+      } else {
+        const pre = prev;
+        const wrap = document.createElement('div');
+        wrap.className = 'prewrap';
+        pre.parentNode.insertBefore(wrap, pre);
+        wrap.appendChild(pre);
+        wrap.appendChild(btn);
+      }
+    });
+  });
+})();
+
+async function copyFromButton(btn){
+  const explicit = btn.dataset.copy;
+  const pre = btn.closest('.prewrap')?.querySelector('pre code');
+  const text = explicit || (pre ? pre.innerText : "");
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.textContent = t('btn.copied');
+    setTimeout(()=>btn.textContent=t('btn.copy'), 1200);
+  } catch (e) {
+    const ta=document.createElement('textarea'); ta.value=text;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    btn.textContent = t('btn.copied'); setTimeout(()=>btn.textContent=t('btn.copy'), 1200);
+  }
+}
+
+document.addEventListener('click', (ev)=>{
+  const btn = ev.target.closest('button.copy');
+  if (btn) copyFromButton(btn);
+});
+
+/* Init i18n + sync cross-tab */
+applyI18n();
+window.addEventListener('storage', (ev)=>{
+  if (ev.key === LS_LANG || ev.key === LS_LANG + '_ping') applyI18n();
+});
+</script>
+
+</body>
+</html>

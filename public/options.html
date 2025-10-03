@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FocusCatalog - Options</title>
+
+<link rel="icon" type="image/svg+xml"
+      href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><text x="50%" y="78%" font-size="96" text-anchor="middle">⚙️</text></svg>'/>
+
+<style>
+  :root { --bg:#0b0c10; --fg:#e8eaf0; --edge:#262a36; --panel:#141722; --muted:#aeb3c2; }
+  * { box-sizing:border-box }
+  body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
+
+  .wrap {
+    max-width:800px; margin:40px auto; background:var(--panel);
+    border:1px solid var(--edge); border-radius:16px; padding:24px;
+    position:relative;
+  }
+
+  /* Pulsanti donazione (immagine) */
+  .donate-btn {
+    position:absolute; top:16px; right:16px; z-index:2;
+    display:inline-flex; gap:8px;
+  }
+  .donate-btn a { display:inline-block; }
+  .donate-btn img {
+    max-height:40px; border-radius:8px; border:1px solid var(--edge);
+    background:#10131b; padding:4px; cursor:pointer; transition:0.2s;
+  }
+  .donate-btn img:hover { border-color:#ffd166; background:#1a1a22; }
+
+  /* Bottone back ⬅️ */
+  .back {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:40px; height:40px; border-radius:10px; margin-bottom:16px;
+    background:#10131b; border:1px solid var(--edge);
+    text-decoration:none; color:inherit; font-size:18px; line-height:1;
+  }
+  .back:visited { color:inherit; text-decoration:none; }
+  .back:hover { border-color:#3a4257; }
+
+  h1 { margin:0 0 16px; font-size:22px; }
+  label { display:block; margin:12px 0 6px; font-weight:600; }
+  input { width:100%; padding:10px; border:1px solid #2f3546; border-radius:10px; background:#0f1118; color:#fff; }
+
+  /* Box sezione (riuso per lingua, NSFW, percorsi) */
+  .section {
+    margin-top:22px; padding:16px;
+    background:#10131b; border:1px solid #2f3546; border-radius:12px;
+  }
+
+  .info { margin-top:24px; padding:16px; background:#10131b; border-radius:10px; border:1px solid #2f3546; color:var(--muted); }
+  .info h2 { margin:0 0 8px; font-size:16px; color:#e8eaf0; }
+  .info p { margin:8px 0; }
+  .info ul { margin:8px 0 8px 20px; padding:0; }
+  .info li { margin:6px 0; }
+  .info .muted { color:var(--muted); }
+
+  .btn-primary {
+    margin-top:16px; padding:10px 20px; border-radius:10px;
+    background:#4c7dff; border:none; color:#fff; cursor:pointer;
+  }
+
+  /* Switch (segmenti/chips) riuso per lingua e nsfw */
+  .switch { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:8px; }
+  .switch .seg {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 12px; border:1px solid var(--edge);
+    border-radius:999px; background:#10131b; color:#e8eaf0;
+    cursor:pointer; user-select:none; font-size:13px;
+  }
+  .switch .seg:hover { border-color:#3a4257; }
+  .switch .seg.active { border-color:#4c7dff; box-shadow: inset 0 0 0 1px #4c7dff33; }
+
+  /* Icone bandiere nei bottoni lingua */
+  .switch .seg img.flag {
+    width:18px; height:18px; border-radius:50%; display:inline-block; object-fit:cover;
+  }
+
+  /* Nota sotto i selettori */
+  .note { margin:8px 0 0; color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Pulsanti donazione -->
+    <div class="donate-btn">
+      <a href="https://liberapay.com/MetaDarko/donate" target="_blank" rel="noopener noreferrer" title="Dona su Liberapay 💛" data-i18n-title="donate.liberapay_title">
+        <img src="liberapay.png" alt="Dona con Liberapay" data-i18n-alt="donate.liberapay_alt"/>
+      </a>
+      <a href="https://www.blockchain.com/explorer/addresses/btc/1E6G9ctHHKKVj3MrD8RtRPbS3NQBfZAY1s" target="_blank" rel="noopener noreferrer" title="Dona con Bitcoin ₿" data-i18n-title="donate.bitcoin_title">
+        <img src="bitcoin.png" alt="Dona con Bitcoin" data-i18n-alt="donate.bitcoin_alt"/>
+      </a>
+    </div>
+
+    <a href="index.html" class="back" title="Torna al catalogo" data-i18n-title="nav.back_title">⬅️</a>
+    <h1 data-i18n="options.title">⚙️ Opzioni</h1>
+
+    <!-- 1) 🌐 Lingua (container) -->
+    <div class="section" id="langSection">
+      <h2 style="margin:0 0 8px;" data-i18n="lang.title">🌐 Lingua dell’interfaccia</h2>
+      <div class="switch" aria-label="Selettore lingua" data-i18n-aria="lang.aria">
+        <button type="button" class="seg" data-lang="it" title="Italiano">
+          <img class="flag" src="ITA.png" alt="IT" width="18" height="18" />
+          <span data-i18n="lang.it">Italiano</span>
+        </button>
+        <button type="button" class="seg" data-lang="en" title="English">
+          <img class="flag" src="ENG.PNG" alt="EN" width="18" height="18" />
+          <span data-i18n="lang.en">English</span>
+        </button>
+        <button type="button" class="seg" data-lang="es" title="Español">
+          <img class="flag" src="esp.png" alt="ES" width="18" height="18" />
+          <span data-i18n="lang.es">Español</span>
+        </button>
+        <button type="button" class="seg" data-lang="fr" title="Français">
+          <img class="flag" src="Fr.png" alt="FR" width="18" height="18" />
+          <span data-i18n="lang.fr">Français</span>
+        </button>
+      </div>
+      <p class="note" data-i18n="lang.note">
+        La lingua si applica “a coperta” sull’interfaccia senza modificare i file o i dati. La preferenza viene salvata nel browser.
+      </p>
+    </div>
+
+    <!-- 2) 🔒 Filtro NSFW -->
+    <div class="section" id="nsfwSection">
+      <h2 style="margin:0 0 8px;" data-i18n="nsfw.title">🔒 Filtro NSFW</h2>
+      <div class="switch" aria-label="Filtro contenuti NSFW" data-i18n-aria="nsfw.aria">
+        <button type="button" id="nsfwSafe" class="seg" data-i18n="nsfw.safe">🟢 Solo SAFE (nascondi NSFW)</button>
+        <button type="button" id="nsfwShow" class="seg" data-i18n="nsfw.show">🔴 Mostra anche NSFW</button>
+      </div>
+      <p class="muted" style="margin:8px 0 0" data-i18n="nsfw.note">
+        Le schede partono tutte con il pallino 🟢. Nel catalogo puoi cliccare il pallino sulla card per segnare un modello come 🔴 (NSFW).
+        Qui decidi se <strong>nascondere</strong> i 🔴 (default) o mostrarli insieme alle 🟢.
+      </p>
+    </div>
+
+    <!-- 3) 🗂️ Percorso Sistema (container con form) -->
+    <div class="section" id="pathsSection">
+      <h2 style="margin:0 0 8px;" data-i18n="paths.title">🗂️ Percorso Sistema</h2>
+      <form>
+        <label for="checkpointDir" data-i18n="labels.checkpointDir">Percorso cartella Checkpoints</label>
+        <input type="text" id="checkpointDir" placeholder="Es. C:\Fooocus\models\checkpoints" data-i18n-placeholder="placeholders.checkpointDir">
+
+        <label for="loraDir" data-i18n="labels.loraDir">Percorso cartella LoRA</label>
+        <input type="text" id="loraDir" placeholder="Es. C:\Fooocus\models\loras" data-i18n-placeholder="placeholders.loraDir">
+
+        <button type="submit" class="btn-primary" data-i18n="buttons.save">Salva impostazioni</button>
+      </form>
+    </div>
+
+    <!-- 4) 📖 Guida -->
+    <div class="info">
+      <h2 data-i18n="guide.title">📖 Guida a FocusCatalog</h2>
+      <p data-i18n="guide.intro_1">
+        Chi utilizza <em>Fooocus</em> sa quanto sia complicato orientarsi tra LoRA e Checkpoint:
+        i creatori spesso assegnano ai file nomi criptici, e ricordarsi il contenuto di decine o centinaia di modelli è praticamente impossibile.
+      </p>
+      <p data-i18n="guide.intro_2">
+        <strong>FocusCatalog risolve questo problema</strong> scansionando automaticamente le cartelle indicate,
+        individuando i tuoi modelli e creando un <strong>catalogo ordinato</strong>, consultabile dal browser.
+      </p>
+
+      <h2 data-i18n="guide.card_title">🔎 Cosa trovi in ogni scheda modello</h2>
+      <ul>
+        <li data-i18n="guide.card_name"> <strong>Nome file copiabile</strong>: clicca sul nome per copiarlo e incollarlo direttamente in Fooocus.</li>
+        <li data-i18n="guide.card_preview"><strong>Anteprima visiva</strong> (se disponibile).</li>
+        <li data-i18n="guide.card_triggers"><strong>Trigger words</strong> (per LoRA), recuperate da Civitai quando presente il link.</li>
+        <li data-i18n="guide.card_civitai"><strong>Link diretto a Civitai</strong> per aprire la pagina del modello.</li>
+      </ul>
+
+      <h2 data-i18n="guide.preview_title">🖼️ Anteprima se il modello non è su Civitai</h2>
+      <ul>
+        <li data-i18n="guide.preview_tip1">Metti nella <strong>stessa cartella</strong> del modello un’immagine con lo <strong>stesso nome base</strong> del file modello.</li>
+        <li data-i18n="guide.preview_tip2">Esempio: <code>ilmiomodello.safetensors</code> ↔ <code>ilmiomodello.png</code> (o <code>ilmiomodello.jpg</code>).</li>
+        <li data-i18n="guide.preview_tip3">Alla prossima scansione, l’immagine verrà usata come <strong>anteprima</strong> nella scheda del modello.</li>
+      </ul>
+
+      <h2 data-i18n="guide.flow_title">🧭 Flusso di utilizzo consigliato</h2>
+      <ol>
+        <li data-i18n="guide.flow_1"><strong>Inserisci il modello</strong> nella cartella corretta (Checkpoint o LoRA).</li>
+        <li data-i18n="guide.flow_2"><strong>Esegui la scansione</strong> (tasto <em>Aggiorna catalogo</em> nella pagina principale).</li>
+        <li data-i18n="guide.flow_3">Comparirà la <strong>scheda vuota</strong> del modello (con nome e, se presente, anteprima locale).</li>
+        <li data-i18n="guide.flow_4"><strong>Clicca sull’icona a ingranaggio</strong> della scheda per aprire le opzioni.</li>
+        <li data-i18n="guide.flow_5"><strong>Incolla il link Civitai</strong> della pagina del modello e premi <em>OK</em>.</li>
+        <li data-i18n="guide.flow_6">La scheda si <strong>aggiorna automaticamente</strong> con trigger words, link e informazioni complete, pronta nel catalogo.</li>
+      </ol>
+
+      <h2 data-i18n="guide.scan_title">⚙️ Impostazioni di scansione</h2>
+      <ul>
+        <li data-i18n="guide.scan_1">Modifica qui sopra i percorsi per puntare alle tue directory personalizzate.</li>
+        <li data-i18n="guide.scan_2">Dopo aver salvato, torna alla pagina principale e clicca <strong>“Aggiorna catalogo”</strong> per rigenerare l’elenco.</li>
+      </ul>
+
+      <h2 data-i18n="guide.benefits_title">✅ Vantaggi</h2>
+      <ul>
+        <li data-i18n="guide.benefits_1"><strong>Ordine visivo</strong> al posto di nomi caotici.</li>
+        <li data-i18n="guide.benefits_2"><strong>Ricerca e filtro</strong> per nome, tipo, data, dimensione.</li>
+        <li data-i18n="guide.benefits_3"><strong>Uso rapido</strong>: copia il nome file con un clic e incollalo in Fooocus.</li>
+        <li data-i18n="guide.benefits_4"><strong>Flessibilità</strong>: anteprime locali e integrazione con Civitai quando disponibile.</li>
+      </ul>
+
+      <h2 data-i18n="guide.thanks_title">💛 Grazie per il supporto</h2>
+      <p data-i18n="guide.thanks_para">
+        Se FocusCatalog ti è stato utile, considera l’idea di lasciare una piccola donazione, anche simbolica:
+        <strong>1 euro o 1 dollaro</strong> è già un modo per dire <em>“ehi, grazie amico!”</em>.
+        Non è tanto per i soldi, quanto per dare una spinta di morale a chi sviluppa questo progetto e
+        ricordare che dall’altra parte c’è qualcuno che apprezza davvero il lavoro fatto.
+      </p>
+      <em data-i18n="guide.signature">Il vostro amico MetaDarko.</em>
+    </div>
+  </div>
+
+  <!-- Logica salvataggio/preload config + NSFW switch + Overlay i18n -->
+  <script>
+  (function () {
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+    /* =========================
+       i18n overlay (IT base)
+       ========================= */
+    const LS_LANG = 'focus_lang_v1';
+    const SUPPORTED = ['it','en','es','fr'];
+
+    const I18N = {
+      it: {
+        'options.title': '⚙️ Opzioni',
+        'nav.back_title': 'Torna al catalogo',
+        'labels.checkpointDir': 'Percorso cartella Checkpoints',
+        'labels.loraDir': 'Percorso cartella LoRA',
+        'placeholders.checkpointDir': 'Es. C:\\Fooocus\\models\\checkpoints',
+        'placeholders.loraDir': 'Es. C:\\Fooocus\\models\\loras',
+        'buttons.save': 'Salva impostazioni',
+        'toast.save_ok': 'Impostazioni salvate ✅',
+        'toast.save_err': 'Errore nel salvataggio',
+        'toast.net_err': 'Errore di rete nel salvataggio',
+        'toast.nsfw_hide': 'Mostro solo SAFE (🔴 nascosti) ✅',
+        'toast.nsfw_show': 'Mostro anche i modelli NSFW ✅',
+        'toast.lang_updated': 'Lingua aggiornata ✅',
+        'lang.title': '🌐 Lingua dell’interfaccia',
+        'lang.it': 'Italiano',
+        'lang.en': 'English',
+        'lang.es': 'Español',
+        'lang.fr': 'Français',
+        'lang.note': 'La lingua si applica “a coperta” sull’interfaccia senza modificare i file o i dati. La preferenza viene salvata nel browser.',
+        'lang.aria': 'Selettore lingua',
+        'nsfw.title': '🔒 Filtro NSFW',
+        'nsfw.safe': '🟢 Solo SAFE (nascondi NSFW)',
+        'nsfw.show': '🔴 Mostra anche NSFW',
+        'nsfw.note': 'Le schede partono tutte con il pallino 🟢. Nel catalogo puoi cliccare il pallino sulla card per segnare un modello come 🔴 (NSFW). Qui decidi se <strong>nascondere</strong> i 🔴 (default) o mostrarli insieme alle 🟢.',
+        'nsfw.aria': 'Filtro contenuti NSFW',
+
+        'guide.title': '📖 Guida a FocusCatalog',
+        'guide.intro_1': 'Chi utilizza <em>Fooocus</em> sa quanto sia complicato orientarsi tra LoRA e Checkpoint: i creatori spesso assegnano ai file nomi criptici, e ricordarsi il contenuto di decine o centinaia di modelli è praticamente impossibile.',
+        'guide.intro_2': '<strong>FocusCatalog risolve questo problema</strong> scansionando automaticamente le cartelle indicate, individuando i tuoi modelli e creando un <strong>catalogo ordinato</strong>, consultabile dal browser.',
+        'guide.card_title': '🔎 Cosa trovi in ogni scheda modello',
+        'guide.card_name': '<strong>Nome file copiabile</strong>: clicca sul nome per copiarlo e incollarlo direttamente in Fooocus.',
+        'guide.card_preview': '<strong>Anteprima visiva</strong> (se disponibile).',
+        'guide.card_triggers': '<strong>Trigger words</strong> (per LoRA), recuperate da Civitai quando presente il link.',
+        'guide.card_civitai': '<strong>Link diretto a Civitai</strong> per aprire la pagina del modello.',
+        'guide.preview_title': '🖼️ Anteprima se il modello non è su Civitai',
+        'guide.preview_tip1': 'Metti nella <strong>stessa cartella</strong> del modello un’immagine con lo <strong>stesso nome base</strong> del file modello.',
+        'guide.preview_tip2': 'Esempio: <code>ilmiomodello.safetensors</code> ↔ <code>ilmiomodello.png</code> (o <code>ilmiomodello.jpg</code>).',
+        'guide.preview_tip3': 'Alla prossima scansione, l’immagine verrà usata come <strong>anteprima</strong> nella scheda del modello.',
+        'guide.flow_title': '🧭 Flusso di utilizzo consigliato',
+        'guide.flow_1': '<strong>Inserisci il modello</strong> nella cartella corretta (Checkpoint o LoRA).',
+        'guide.flow_2': '<strong>Esegui la scansione</strong> (tasto <em>Aggiorna catalogo</em> nella pagina principale).',
+        'guide.flow_3': 'Comparirà la <strong>scheda vuota</strong> del modello (con nome e, se presente, anteprima locale).',
+        'guide.flow_4': '<strong>Clicca sull’icona a ingranaggio</strong> della scheda per aprire le opzioni.',
+        'guide.flow_5': '<strong>Incolla il link Civitai</strong> della pagina del modello e premi <em>OK</em>.',
+        'guide.flow_6': 'La scheda si <strong>aggiorna automaticamente</strong> con trigger words, link e informazioni complete, pronta nel catalogo.',
+        'guide.scan_title': '⚙️ Impostazioni di scansione',
+        'guide.scan_1': 'Modifica qui sopra i percorsi per puntare alle tue directory personalizzate.',
+        'guide.scan_2': 'Dopo aver salvato, torna alla pagina principale e clicca <strong>“Aggiorna catalogo”</strong> per rigenerare l’elenco.',
+        'guide.benefits_title': '✅ Vantaggi',
+        'guide.benefits_1': '<strong>Ordine visivo</strong> al posto di nomi caotici.',
+        'guide.benefits_2': '<strong>Ricerca e filtro</strong> per nome, tipo, data, dimensione.',
+        'guide.benefits_3': '<strong>Uso rapido</strong>: copia il nome file con un clic e incollalo in Fooocus.',
+        'guide.benefits_4': '<strong>Flessibilità</strong>: anteprime locali e integrazione con Civitai quando disponibile.',
+        'guide.thanks_title': '💛 Grazie per il supporto',
+        'guide.thanks_para': 'Se FocusCatalog ti è stato utile, considera l’idea di lasciare una piccola donazione, anche simbolica: <strong>1 euro o 1 dollaro</strong> è già un modo per dire <em>“ehi, grazie amico!”</em>. Non è tanto per i soldi, quanto per dare una spinta di morale a chi sviluppa questo progetto e ricordare che dall’altra parte c’è qualcuno che apprezza davvero il lavoro fatto.',
+        'guide.signature': 'Il vostro amico MetaDarko.',
+
+        'donate.liberapay_title': 'Dona su Liberapay 💛',
+        'donate.liberapay_alt': 'Dona con Liberapay',
+        'donate.bitcoin_title': 'Dona con Bitcoin ₿',
+        'donate.bitcoin_alt': 'Dona con Bitcoin',
+        'paths.title': '🗂️ Percorso Sistema'
+      },
+      en: {
+        'options.title': '⚙️ Options',
+        'nav.back_title': 'Back to catalog',
+        'labels.checkpointDir': 'Checkpoints folder path',
+        'labels.loraDir': 'LoRA folder path',
+        'placeholders.checkpointDir': 'Eg. C:\\Fooocus\\models\\checkpoints',
+        'placeholders.loraDir': 'Eg. C:\\Fooocus\\models\\loras',
+        'buttons.save': 'Save settings',
+        'toast.save_ok': 'Settings saved ✅',
+        'toast.save_err': 'Save error',
+        'toast.net_err': 'Network error while saving',
+        'toast.nsfw_hide': 'Showing SAFE only (🔴 hidden) ✅',
+        'toast.nsfw_show': 'Showing NSFW too ✅',
+        'toast.lang_updated': 'Language updated ✅',
+        'lang.title': '🌐 Interface language',
+        'lang.it': 'Italiano',
+        'lang.en': 'English',
+        'lang.es': 'Español',
+        'lang.fr': 'Français',
+        'lang.note': 'Language is applied as an overlay without changing files or data. Preference is saved in your browser.',
+        'lang.aria': 'Language selector',
+        'nsfw.title': '🔒 NSFW filter',
+        'nsfw.safe': '🟢 SAFE only (hide NSFW)',
+        'nsfw.show': '🔴 Show NSFW too',
+        'nsfw.note': 'Cards start with the 🟢 dot. In the catalog you can mark a model as 🔴 (NSFW). Decide here whether to <strong>hide</strong> 🔴 (default) or show them together with 🟢.',
+        'nsfw.aria': 'NSFW content filter',
+
+        'guide.title': '📖 FocusCatalog guide',
+        'guide.intro_1': 'Those who use <em>Fooocus</em> know how complicated it is to find their way among LoRA and Checkpoints: creators often give files cryptic names, and remembering the contents of dozens or hundreds of models is practically impossible.',
+        'guide.intro_2': '<strong>FocusCatalog solves this problem</strong> by automatically scanning the specified folders, finding your models and creating an <strong>organized catalog</strong> that can be browsed in the browser.',
+        'guide.card_title': '🔎 What each model card shows',
+        'guide.card_name': '<strong>Copyable file name</strong>: click the name to copy and paste into Fooocus.',
+        'guide.card_preview': '<strong>Visual preview</strong> (if available).',
+        'guide.card_triggers': '<strong>Trigger words</strong> (for LoRA), fetched from Civitai when the link is provided.',
+        'guide.card_civitai': '<strong>Direct link to Civitai</strong> to open the model page.',
+        'guide.preview_title': '🖼️ Preview when the model is not on Civitai',
+        'guide.preview_tip1': 'Put an image with the <strong>same base name</strong> as the model in the <strong>same folder</strong>.',
+        'guide.preview_tip2': 'Example: <code>mymodel.safetensors</code> ↔ <code>mymodel.png</code> (or <code>mymodel.jpg</code>).',
+        'guide.preview_tip3': 'On the next scan, the image will be used as a <strong>preview</strong> on the model card.',
+        'guide.flow_title': '🧭 Suggested workflow',
+        'guide.flow_1': '<strong>Place the model</strong> in the correct folder (Checkpoint or LoRA).',
+        'guide.flow_2': '<strong>Run the scan</strong> (button <em>Refresh catalog</em> on the main page).',
+        'guide.flow_3': 'A <strong>blank card</strong> will appear (with name and, if present, local preview).',
+        'guide.flow_4': '<strong>Click the gear icon</strong> on the card to open options.',
+        'guide.flow_5': '<strong>Paste the Civitai link</strong> of the model page and press <em>OK</em>.',
+        'guide.flow_6': 'The card <strong>updates automatically</strong> with trigger words, link and details.',
+        'guide.scan_title': '⚙️ Scan settings',
+        'guide.scan_1': 'Edit the paths above to point to your custom directories.',
+        'guide.scan_2': 'After saving, go back to the main page and click <strong>“Refresh catalog”</strong> to regenerate the list.',
+        'guide.benefits_title': '✅ Benefits',
+        'guide.benefits_1': '<strong>Visual order</strong> instead of chaotic names.',
+        'guide.benefits_2': '<strong>Search & filter</strong> by name, type, date, size.',
+        'guide.benefits_3': '<strong>Fast usage</strong>: copy file name with one click and paste into Fooocus.',
+        'guide.benefits_4': '<strong>Flexibility</strong>: local previews and Civitai integration when available.',
+        'guide.thanks_title': '💛 Thanks for your support',
+        'guide.thanks_para': 'If FocusCatalog has been useful to you, consider leaving a small donation, even symbolic: <strong>1 euro or 1 dollar</strong> is already a way to say <em>“hey, thanks my friend!”</em>. It’s not so much for the money as to give a morale boost to those who develop this project and to remember that on the other side there is someone who truly appreciates the work done.',
+        'guide.signature': 'Your friend MetaDarko.',
+
+        'donate.liberapay_title': 'Donate on Liberapay 💛',
+        'donate.liberapay_alt': 'Donate with Liberapay',
+        'donate.bitcoin_title': 'Donate with Bitcoin ₿',
+        'donate.bitcoin_alt': 'Donate with Bitcoin',
+        'paths.title': '🗂️ System paths'
+      },
+      es: {
+        'options.title': '⚙️ Opciones',
+        'nav.back_title': 'Volver al catálogo',
+        'labels.checkpointDir': 'Ruta de la carpeta Checkpoints',
+        'labels.loraDir': 'Ruta de la carpeta LoRA',
+        'placeholders.checkpointDir': 'Ej. C:\\Fooocus\\models\\checkpoints',
+        'placeholders.loraDir': 'Ej. C:\\Fooocus\\models\\loras',
+        'buttons.save': 'Guardar ajustes',
+        'toast.save_ok': 'Ajustes guardados ✅',
+        'toast.save_err': 'Error al guardar',
+        'toast.net_err': 'Error de red al guardar',
+        'toast.nsfw_hide': 'Mostrar solo SAFE (🔴 ocultos) ✅',
+        'toast.nsfw_show': 'Mostrar también NSFW ✅',
+        'toast.lang_updated': 'Idioma actualizado ✅',
+        'lang.title': '🌐 Idioma de la interfaz',
+        'lang.it': 'Italiano',
+        'lang.en': 'English',
+        'lang.es': 'Español',
+        'lang.fr': 'Français',
+        'lang.note': 'El idioma se aplica como una “cobertura” sin cambiar archivos ni datos. La preferencia se guarda en el navegador.',
+        'lang.aria': 'Selector de idioma',
+        'nsfw.title': '🔒 Filtro NSFW',
+        'nsfw.safe': '🟢 Solo SAFE (ocultar NSFW)',
+        'nsfw.show': '🔴 Mostrar también NSFW',
+        'nsfw.note': 'Las tarjetas comienzan con el punto 🟢. En el catálogo puedes marcar un modelo como 🔴 (NSFW). Aquí decides si <strong>ocultar</strong> los 🔴 (por defecto) o mostrarlos junto a los 🟢.',
+        'nsfw.aria': 'Filtro de contenido NSFW',
+
+        'guide.title': '📖 Guía de FocusCatalog',
+        'guide.intro_1': 'Quien utiliza <em>Fooocus</em> sabe lo complicado que es orientarse entre LoRA y Checkpoints: los creadores a menudo asignan a los archivos nombres crípticos, y recordar el contenido de decenas o cientos de modelos es prácticamente imposible.',
+        'guide.intro_2': '<strong>FocusCatalog resuelve este problema</strong> escaneando automáticamente las carpetas indicadas, detectando tus modelos y creando un <strong>catálogo ordenado</strong> consultable desde el navegador.',
+        'guide.card_title': '🔎 Qué muestra cada tarjeta de modelo',
+        'guide.card_name': '<strong>Nombre de archivo copiable</strong>: haz clic para copiar y pegar en Fooocus.',
+        'guide.card_preview': '<strong>Vista previa</strong> (si disponible).',
+        'guide.card_triggers': '<strong>Palabras clave</strong> (para LoRA), obtenidas de Civitai cuando hay enlace.',
+        'guide.card_civitai': '<strong>Enlace directo a Civitai</strong> para abrir la página del modelo.',
+        'guide.preview_title': '🖼️ Vista previa si el modelo no está en Civitai',
+        'guide.preview_tip1': 'Pon una imagen con el <strong>mismo nombre base</strong> que el modelo en la <strong>misma carpeta</strong>.',
+        'guide.preview_tip2': 'Ejemplo: <code>mimodelo.safetensors</code> ↔ <code>mimodelo.png</code> (o <code>mimodelo.jpg</code>).',
+        'guide.preview_tip3': 'En el próximo escaneo, la imagen se usará como <strong>vista previa</strong> en la tarjeta del modelo.',
+        'guide.flow_title': '🧭 Flujo de uso recomendado',
+        'guide.flow_1': '<strong>Coloca el modelo</strong> en la carpeta correcta (Checkpoint o LoRA).',
+        'guide.flow_2': '<strong>Ejecuta el escaneo</strong> (botón <em>Actualizar catálogo</em> en la página principal).',
+        'guide.flow_3': 'Aparecerá una <strong>tarjeta en blanco</strong> (con nombre y, si existe, vista previa local).',
+        'guide.flow_4': '<strong>Haz clic en el engranaje</strong> de la tarjeta para abrir las opciones.',
+        'guide.flow_5': '<strong>Pega el enlace de Civitai</strong> de la página del modelo y pulsa <em>OK</em>.',
+        'guide.flow_6': 'La tarjeta se <strong>actualiza automáticamente</strong> con palabras clave, enlace e información.',
+        'guide.scan_title': '⚙️ Ajustes de escaneo',
+        'guide.scan_1': 'Edita las rutas de arriba para apuntar a tus directorios.',
+        'guide.scan_2': 'Tras guardar, vuelve a la página principal y pulsa <strong>“Actualizar catálogo”</strong>.',
+        'guide.benefits_title': '✅ Ventajas',
+        'guide.benefits_1': '<strong>Orden visual</strong> en lugar de nombres caóticos.',
+        'guide.benefits_2': '<strong>Búsqueda y filtro</strong> por nombre, tipo, fecha, tamaño.',
+        'guide.benefits_3': '<strong>Uso rápido</strong>: copia el nombre con un clic y pégalo en Fooocus.',
+        'guide.benefits_4': '<strong>Flexibilidad</strong> : vistas previas locales e integración con Civitai.',
+        'guide.thanks_title': '💛 Gracias por tu apoyo',
+        'guide.thanks_para': 'Si FocusCatalog te ha sido útil, considera dejar una pequeña donación, aunque sea simbólica: <strong>1 euro o 1 dólar</strong> ya es una forma de decir <em>“¡hey, gracias amigo!”</em>. No es tanto por el dinero, sino para dar un empujón moral a quien desarrolla este proyecto y recordar que al otro lado hay alguien que aprecia de verdad el trabajo realizado.',
+        'guide.signature': 'Tu amigo MetaDarko.',
+
+        'donate.liberapay_title': 'Donar en Liberapay 💛',
+        'donate.liberapay_alt': 'Donar con Liberapay',
+        'donate.bitcoin_title': 'Donar con Bitcoin ₿',
+        'donate.bitcoin_alt': 'Donar con Bitcoin',
+        'paths.title': '🗂️ Rutas del sistema'
+      },
+      fr: {
+        'options.title': '⚙️ Options',
+        'nav.back_title': 'Retour au catalogue',
+        'labels.checkpointDir': 'Chemin du dossier Checkpoints',
+        'labels.loraDir': 'Chemin du dossier LoRA',
+        'placeholders.checkpointDir': 'Ex. C:\\Fooocus\\models\\checkpoints',
+        'placeholders.loraDir': 'Ex. C:\\Fooocus\\models\\loras',
+        'buttons.save': 'Enregistrer',
+        'toast.save_ok': 'Paramètres enregistrés ✅',
+        'toast.save_err': 'Erreur d’enregistrement',
+        'toast.net_err': 'Erreur réseau lors de l’enregistrement',
+        'toast.nsfw_hide': 'Afficher SAFE seulement (🔴 cachés) ✅',
+        'toast.nsfw_show': 'Afficher aussi NSFW ✅',
+        'toast.lang_updated': 'Langue mise à jour ✅',
+        'lang.title': '🌐 Langue de l’interface',
+        'lang.it': 'Italiano',
+        'lang.en': 'English',
+        'lang.es': 'Español',
+        'lang.fr': 'Français',
+        'lang.note': 'La langue s’applique en “surcouche” sans modifier les fichiers ni les données. La préférence est enregistrée dans le navigateur.',
+        'lang.aria': 'Sélecteur de langue',
+        'nsfw.title': '🔒 Filtre NSFW',
+        'nsfw.safe': '🟢 SAFE seulement (masquer NSFW)',
+        'nsfw.show': '🔴 Afficher aussi NSFW',
+        'nsfw.note': 'Les cartes commencent avec le point 🟢. Dans le catalogue, vous pouvez marquer un modèle comme 🔴 (NSFW). Choisissez ici de les <strong>masquer</strong> (par défaut) ou de les afficher avec les 🟢.',
+        'nsfw.aria': 'Filtre de contenu NSFW',
+
+        'guide.title': '📖 Guide de FocusCatalog',
+        'guide.intro_1': 'Les utilisateurs de <em>Fooocus</em> savent à quel point il est compliqué de s’orienter entre les LoRA et les Checkpoints : les créateurs donnent souvent aux fichiers des noms cryptiques, et se souvenir du contenu de dizaines ou de centaines de modèles est pratiquement impossible.',
+        'guide.intro_2': '<strong>FocusCatalog résout ce problème</strong> en analysant automatiquement les dossiers indiqués, en identifiant vos modèles et en créant un <strong>catalogue ordonné</strong> consultable depuis le navigateur.',
+        'guide.card_title': '🔎 Contenu de chaque carte modèle',
+        'guide.card_name': '<strong>Nom de fichier copiable</strong> : cliquez pour copier et coller dans Fooocus.',
+        'guide.card_preview': '<strong>Aperçu visuel</strong> (si disponible).',
+        'guide.card_triggers': '<strong>Mots-clés</strong> (pour LoRA), récupérés depuis Civitai si lien fourni.',
+        'guide.card_civitai': '<strong>Lien direct vers Civitai</strong> pour ouvrir la page du modèle.',
+        'guide.preview_title': '🖼️ Aperçu si le modèle n’est pas sur Civitai',
+        'guide.preview_tip1': 'Placez une image portant le <strong>même nom de base</strong> que le modèle dans le <strong>même dossier</strong>.',
+        'guide.preview_tip2': 'Exemple : <code>monmodele.safetensors</code> ↔ <code>monmodele.png</code> (ou <code>monmodele.jpg</code>).',
+        'guide.preview_tip3': 'Au prochain scan, l’image sera utilisée comme <strong>aperçu</strong> sur la carte.',
+        'guide.flow_title': '🧭 Flux d’utilisation conseillé',
+        'guide.flow_1': '<strong>Placez le modèle</strong> dans le dossier adéquat (Checkpoint ou LoRA).',
+        'guide.flow_2': '<strong>Lancez le scan</strong> (bouton <em>Actualiser le catalogue</em> sur la page d’accueil).',
+        'guide.flow_3': 'Une <strong>carte vide</strong> apparaîtra (avec nom et, si présent, aperçu local).',
+        'guide.flow_4': '<strong>Cliquez sur l’icône engrenage</strong> de la carte pour ouvrir les options.',
+        'guide.flow_5': '<strong>Collez le lien Civitai</strong> de la page du modèle puis <em>OK</em>.',
+        'guide.flow_6': 'La carte se <strong>met à jour automatiquement</strong> avec mots-clés, lien et informations.',
+        'guide.scan_title': '⚙️ Paramètres de scan',
+        'guide.scan_1': 'Modifiez les chemins ci-dessus pour vos dossiers personnalisés.',
+        'guide.scan_2': 'Après l’enregistrement, retournez à l’accueil et cliquez <strong>“Actualiser le catalogue”</strong>.',
+        'guide.benefits_title': '✅ Avantages',
+        'guide.benefits_1': '<strong>Ordre visuel</strong> plutôt que des noms chaotiques.',
+        'guide.benefits_2': '<strong>Recherche et filtres</strong> par nom, type, date, taille.',
+        'guide.benefits_3': '<strong>Utilisation rapide</strong> : copiez le nom en un clic et collez-le dans Fooocus.',
+        'guide.benefits_4': '<strong>Flexibilité</strong> : aperçus locaux et intégration Civitai.',
+        'guide.thanks_title': '💛 Merci pour votre soutien',
+        'guide.thanks_para': 'Si FocusCatalog vous a été utile, envisagez de laisser un petit don, même symbolique : <strong>1 euro ou 1 dollar</strong> est déjà une manière de dire <em>« hé, merci mon ami ! »</em>. Ce n’est pas tant pour l’argent que pour donner un coup de pouce moral à ceux qui développent ce projet et rappeler qu’en face il y a quelqu’un qui apprécie vraiment le travail accompli.',
+        'guide.signature': 'Votre ami MetaDarko.',
+
+        'donate.liberapay_title': 'Faire un don sur Liberapay 💛',
+        'donate.liberapay_alt': 'Donner avec Liberapay',
+        'donate.bitcoin_title': 'Donner avec Bitcoin ₿',
+        'donate.bitcoin_alt': 'Donner avec Bitcoin',
+        'paths.title': '🗂️ Chemins du système'
+      }
+    };
+
+    function getLang(){
+      const v = localStorage.getItem(LS_LANG) || 'it';
+      return SUPPORTED.includes(v) ? v : 'it';
+    }
+    function setLang(lang){
+      const v = SUPPORTED.includes(lang) ? lang : 'it';
+      localStorage.setItem(LS_LANG, v);
+      document.documentElement.lang = v;
+      applyI18n();
+      // segni attivi
+      updateLangSegments();
+      toast(t('toast.lang_updated'), true);
+      // Notifica altre tab
+      try { localStorage.setItem(LS_LANG + '_ping', String(Date.now())); } catch {}
+    }
+    function t(key){
+      const lang = getLang();
+      return (I18N[lang] && I18N[lang][key]) || I18N.it[key] || key;
+    }
+    function applyI18n(){
+      // Text nodes
+      $$('[data-i18n]').forEach(el=>{
+        const key = el.getAttribute('data-i18n');
+        const html = t(key);
+        // se contiene tag HTML (es. <strong>) sostituiamo come HTML
+        if (/<[a-z][\s\S]*>/i.test(html)) el.innerHTML = html; else el.textContent = html;
+      });
+      // Placeholders
+      $$('[data-i18n-placeholder]').forEach(el=>{
+        const key = el.getAttribute('data-i18n-placeholder');
+        el.setAttribute('placeholder', t(key));
+      });
+      // title/aria/alt
+      $$('[data-i18n-title]').forEach(el=>el.setAttribute('title', t(el.getAttribute('data-i18n-title'))));
+      $$('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria'))));
+      $$('[data-i18n-alt]').forEach(el=>el.setAttribute('alt', t(el.getAttribute('data-i18n-alt'))));
+    }
+    function updateLangSegments(){
+      const lang = getLang();
+      $$('#langSection .seg').forEach(btn=>{
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+    }
+
+    // Piccolo toast
+    function toast(msg, ok=true) {
+      const tdiv = document.createElement('div');
+      tdiv.textContent = msg;
+      tdiv.style.position = 'fixed';
+      tdiv.style.right = '16px';
+      tdiv.style.bottom = '16px';
+      tdiv.style.padding = '10px 14px';
+      tdiv.style.borderRadius = '10px';
+      tdiv.style.background = ok ? '#1f6f3b' : '#7f1d1d';
+      tdiv.style.color = 'white';
+      tdiv.style.boxShadow = '0 8px 24px rgba(0,0,0,.35)';
+      tdiv.style.zIndex = '9999';
+      document.body.appendChild(tdiv);
+      setTimeout(() => tdiv.remove(), 2800);
+    }
+
+    const form = $('form');
+    const inpCheckpoint = $('#checkpointDir');
+    const inpLora = $('#loraDir');
+
+    /* Storage key per filtro NSFW */
+    const LS_NSFW_SHOW = "fooocus_nsfw_show_v1"; // "hide" (default) | "show"
+
+    async function preload() {
+      // Imposta lang all'avvio
+      document.documentElement.lang = getLang();
+      applyI18n();
+      updateLangSegments();
+
+      try {
+        const r = await fetch('/api/config');
+        if (r.ok) {
+          const j = await r.json();
+          if (j.checkpointDir) inpCheckpoint.value = j.checkpointDir;
+          if (j.loraDir) inpLora.value = j.loraDir;
+        }
+      } catch (e) {
+        console.warn('Preload config fallito:', e);
+      }
+
+      // Sincronizza stato segmenti NSFW
+      refreshNSFWSeg();
+    }
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const btn = form.querySelector('button[type="submit"]');
+      const payload = {
+        checkpointDir: inpCheckpoint.value.trim(),
+        loraDir: inpLora.value.trim()
+      };
+      try {
+        btn.disabled = true;
+        const r = await fetch('/api/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const j = await r.json().catch(() => ({}));
+        if (r.ok && j.ok) {
+          toast(t('toast.save_ok'), true);
+        } else {
+          toast(j.error || t('toast.save_err'), false);
+        }
+      } catch (e) {
+        console.error(e);
+        toast(t('toast.net_err'), false);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    /* Logica toggle NSFW */
+    const btnSafe = $('#nsfwSafe');
+    const btnShow = $('#nsfwShow');
+
+    function refreshNSFWSeg(){
+      const mode = (localStorage.getItem(LS_NSFW_SHOW) || 'hide');
+      btnSafe.classList.toggle('active', mode === 'hide');
+      btnShow.classList.toggle('active', mode === 'show');
+    }
+
+    btnSafe?.addEventListener('click', ()=>{
+      localStorage.setItem(LS_NSFW_SHOW, 'hide');
+      refreshNSFWSeg();
+      toast(t('toast.nsfw_hide'), true);
+    });
+
+    btnShow?.addEventListener('click', ()=>{
+      localStorage.setItem(LS_NSFW_SHOW, 'show');
+      refreshNSFWSeg();
+      toast(t('toast.nsfw_show'), true);
+    });
+
+    // Selettore lingua
+    $$('#langSection .seg').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const sel = btn.getAttribute('data-lang');
+        setLang(sel);
+      });
+    });
+
+    // Aggiorna i segmenti se cambia da un'altra tab + ping i18n
+    window.addEventListener('storage', (ev)=>{
+      if (ev.key === LS_NSFW_SHOW) refreshNSFWSeg();
+      if (ev.key === LS_LANG || ev.key === LS_LANG + '_ping') {
+        document.documentElement.lang = getLang();
+        applyI18n();
+        updateLangSegments();
+      }
+    });
+
+    // Avvio
+    preload();
+  })();
+  </script>
+</body>
+</html>
