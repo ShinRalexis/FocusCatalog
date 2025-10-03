@@ -42,7 +42,7 @@ Open: http://127.0.0.1:8765
 
 Run with Docker (recommended)
 ```bash
-docker build -t focuscatalog .
+docker build -t focuscatalog
 docker run -it -p 8765:8765 -v /path/to/models:/models focuscatalog
 Replace /path/to/models with the folder containing your Fooocus models.
 ```
