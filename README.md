@@ -20,6 +20,7 @@ What used to be messy folders now becomes a clear and browsable catalog.
 - Mark models as favorites ❤️ or toggle NSFW visibility
 - Configurable folders and settings saved in `options.html`
 - Runs entirely locally with a simple **Flask web server**
+- Supported languages: Italian, English, Spanish, and French.
 
 ![FocusCatalog Screenshot](public/sample2.png)
 
