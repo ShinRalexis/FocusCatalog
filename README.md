@@ -1,3 +1,4 @@
+![FocusCatalog Screenshot](public/sample1.png)
 # ❤️ FocusCatalog
 
 FocusCatalog was born out of necessity.  
@@ -19,6 +20,8 @@ What used to be messy folders now becomes a clear and browsable catalog.
 - Mark models as favorites ❤️ or toggle NSFW visibility
 - Configurable folders and settings saved in `options.html`
 - Runs entirely locally with a simple **Flask web server**
+
+![FocusCatalog Screenshot](public/sample2.png)
 
 ## 📖 Documentation
 A full prompt manual is included in help.html (best practices, prompt structure, trigger words, troubleshooting).
