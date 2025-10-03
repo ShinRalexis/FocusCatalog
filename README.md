@@ -1,4 +1,4 @@
-![FocusCatalog Screenshot](public/sample1.png)
+![FocusCatalog Screenshot](public/sample1.jpg)
 # ❤️ FocusCatalog
 
 FocusCatalog was born out of necessity.  
