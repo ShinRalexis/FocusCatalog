@@ -1,5 +1,5 @@
 ![FocusCatalog Screenshot](public/sample1.jpg)
-# Find your LoRA or Checkpoint immediately, copy and paste it into Fooocus.
+# Find your LoRA or Checkpoint immediately, copy and paste it into Fooocus. For an immediate workflow.
 # ❤️ FocusCatalog (Fooocus Tool)
 Fooocus Tool to organise your LoRA and Checkpoint templates with previews of template names and TRIGGER WORDS always ready to copy and paste.
 
