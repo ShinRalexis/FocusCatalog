@@ -16,15 +16,25 @@ It brings clarity and structure to your model library: scans your folders, gener
 What used to be a messy folder now becomes a clear, searchable visual catalog.
 
 ✨ Features
+
 🧩 Automatic scan of Checkpoints and LoRA folders
+
 🗂️ JSON index generation with full metadata
+
 🖼️ Local preview support (just drop an image next to the model file)
+
 🌐 Civitai integration for display name, previews, and trigger words
+
 🆕 “NEW” badge for recently added models
+
 ❤️ Favorites and NSFW toggle filtering
+
 ⚙️ Configurable folders and persistent settings via options.html
+
 💻 Runs entirely locally — simple Flask web server, no external dependencies
+
 🌍 Supported languages: Italian, English, Spanish, French
+
 
 ![FocusCatalog Screenshot](public/sample2.png)
 
