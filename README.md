@@ -12,7 +12,7 @@ Working with Fooocus quickly becomes frustrating: dozens (or even hundreds) of m
 This chaos makes it nearly impossible to keep a clean workflow, remember what each model does, or quickly find the right LoRA for a project.
 
 FocusCatalog fixes that.
-It brings clarity and structure to your model library: scans your folders, generates an index with thumbnails, shows file size and date, and — if desired — fetches previews and trigger words directly from Civitai.
+It brings clarity and structure to your model library: scans your folders, generates an index with thumbnails, shows file size and date, and, if desired, fetches previews and trigger words directly from Civitai.
 What used to be a messy folder now becomes a clear, searchable visual catalog.
 
 ✨ Features
@@ -31,7 +31,7 @@ What used to be a messy folder now becomes a clear, searchable visual catalog.
 
 ⚙️ Configurable folders and persistent settings via options.html
 
-💻 Runs entirely locally — simple Flask web server, no external dependencies
+💻 Runs entirely locally, simple Flask web server, no external dependencies
 
 🌍 Supported languages: Italian, English, Spanish, French
 
