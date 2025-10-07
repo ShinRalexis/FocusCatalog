@@ -35,7 +35,6 @@ What used to be a messy folder now becomes a clear, searchable visual catalog.
 
 🌍 Supported languages: Italian, English, Spanish, French
 
-
 ![FocusCatalog Screenshot](public/sample2.png)
 
 📖 Documentation
