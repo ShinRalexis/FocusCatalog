@@ -50,7 +50,7 @@ python server.py --out public
 ```
 Open: http://127.0.0.1:8765
 
-🐳 Run with Docker (recommended)
+### 🐳 Run with Docker (recommended)
 ```bash
 docker build -t focuscatalog .
 docker run -it -p 8765:8765 -v /path/to/models:/models focuscatalog
