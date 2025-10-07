@@ -1,3 +1,17 @@
+# ===============================================================
+# 📦 License
+# FocusCatalog © 2025 MetaDarko
+#
+# This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License (CC-BY-SA 4.0).
+#
+# You are free to share and adapt the material for any purpose, even commercially,
+# as long as you give appropriate credit to MetaDarko,
+# and distribute your contributions under the same license.
+#
+# In short: anyone can improve or fork FocusCatalog,
+# but the authorship remains with MetaDarko, and all derivatives must remain open.
+# ===============================================================
+
 FOCUSCATALOG — README.TXT ENG
 ================================
 
