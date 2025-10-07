@@ -86,6 +86,18 @@ services:
       - "D:/Stable Diffusion/Fooocus_win64_2-1-831/Fooocus/models/checkpoints:/models/checkpoints:ro"
       - "D:/Stable Diffusion/Fooocus_win64_2-1-831/Fooocus/models/loras:/models/loras:ro"
 ```
+## 🐞 Bug Report & Feedback
+
+If you encounter any bugs, issues, or unexpected behavior,
+please open an Issue on the GitHub repository
+
+or contact the author directly.
+
+Developer: MetaDarko
+📧 You can reach me through my GitHub profile or project discussions.
+
+Your feedback helps improve FocusCatalog and keep it stable for everyone ❤️
+
 ## 📦 License
 
 FocusCatalog © 2025 MetaDarko
