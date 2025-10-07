@@ -1,5 +1,5 @@
 ![FocusCatalog Screenshot](public/sample1.jpg)
-❤️ FocusCatalog (Fooocus Tool)
+### ❤️ FocusCatalog (Fooocus Tool)
 
 Find your LoRA or Checkpoint instantly, copy, paste, and generate in Fooocus for a seamless workflow.
 
